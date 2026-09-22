@@ -1,0 +1,26 @@
+{
+  "name": "mawja-example-typescript",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "npm run test:add && npm run test:calc",
+    "test:add": "node --import tsx scripts/governance/check-add.ts",
+    "test:calc": "node --import tsx tests/calc.test.ts",
+    "check": "npm run types:check && npm test && npm run lint:debt-ledger:strict",
+    "types:init": "node --import tsx scripts/conductor/check-types-baseline.ts --init",
+    "types:update": "node --import tsx scripts/conductor/check-types-baseline.ts --update",
+    "types:check": "node --import tsx scripts/conductor/check-types-baseline.ts --json",
+    "wave:new": "node --import tsx scripts/conductor/wave-prompt.ts --new",
+    "wave:check": "node --import tsx scripts/conductor/wave-prompt.ts --check",
+    "wave:verify": "node --import tsx scripts/conductor/verify-wave.ts",
+    "wave:number": "node --import tsx scripts/conductor/wave-prompt.ts --next-number",
+    "lint:debt-ledger:strict": "node --import tsx scripts/conductor/check-debt-ledger.ts --strict",
+    "gates:count": "node --import tsx scripts/conductor/count-gates.ts"
+  },
+  "devDependencies": {
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

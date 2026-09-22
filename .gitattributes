@@ -1,0 +1,5 @@
+# Include runnable example source in GitHub language statistics.
+examples/**/*.ts linguist-documentation=false
+examples/**/*.js linguist-documentation=false
+examples/**/*.mjs linguist-documentation=false
+examples/**/*.py linguist-documentation=false

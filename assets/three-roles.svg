@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 400" width="1240" height="400" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <style>
+    .bg{fill:#ffffff} .card{fill:#ffffff;stroke:#d0d7de} .owner{fill:#fbfcfd;stroke:#d0d7de}
+    .exec{fill:#f3f8ff;stroke:#0969da} .cond{fill:#ecfdf5;stroke:#0e715f}
+    .role{fill:#1f2328;font-size:19px;font-weight:700}
+    .kicker{fill:#8c959f;font-size:11px;font-weight:700;letter-spacing:.14em}
+    .li{fill:#656d76;font-size:12.5px}
+    .never{fill:#cf222e;font-size:12.5px;font-weight:600} .nocirc{stroke:#cf222e}
+    .edge{fill:#656d76;font-size:12px;font-weight:600}
+    .foot{fill:#6e7781;font-size:12.5px}
+    .arrow{stroke:#8c959f} .ahead{fill:#8c959f} .rule{stroke:#d0d7de} .dot{fill:#8c959f}
+    .er{fill:#0969da} .cr{fill:#0e715f}
+    @media (prefers-color-scheme: dark){
+      .bg{fill:#0d1117} .card{fill:#161b22;stroke:#30363d} .owner{fill:#161b22;stroke:#30363d}
+      .exec{fill:#0d1f33;stroke:#4493f8} .cond{fill:#0c2b24;stroke:#2ea88a}
+      .role{fill:#e6edf3} .kicker{fill:#6e7681} .li{fill:#8b949e} .never{fill:#f85149} .nocirc{stroke:#f85149}
+      .edge{fill:#8b949e} .foot{fill:#8b949e} .arrow{stroke:#6e7681} .ahead{fill:#6e7681} .rule{stroke:#30363d}
+      .dot{fill:#6e7681} .er{fill:#4493f8} .cr{fill:#2ea88a}
+    }
+  </style>
+  <rect class="bg" width="1240" height="400"/>
+
+  <!-- ══ Owner ══ -->
+  <rect class="owner" x="36" y="56" width="340" height="214" rx="12" stroke-width="1.5"/>
+  <text class="kicker" x="60" y="88">DECIDES</text>
+  <text class="role"   x="60" y="118">Owner</text>
+  <circle class="dot" cx="66" cy="146" r="2.5"/>
+  <text class="li" x="78" y="151">What gets built</text>
+  <circle class="dot" cx="66" cy="172" r="2.5"/>
+  <text class="li" x="78" y="177">Settles open questions</text>
+  <circle class="dot" cx="66" cy="198" r="2.5"/>
+  <text class="li" x="78" y="203">Approves spend · decides when to ship</text>
+  <line class="rule" x1="60" y1="222" x2="352" y2="222" stroke-width="1"/>
+  <circle class="nocirc" cx="67" cy="241" r="7" fill="none" stroke-width="1.8"/><line class="nocirc" x1="62.5" y1="236.5" x2="71.5" y2="245.5" stroke-width="1.8"/><text class="never" x="82" y="246">Never asked for technical detail</text>
+
+  <!-- ══ Executor ══ -->
+  <rect class="exec" x="458" y="56" width="340" height="214" rx="12" stroke-width="2"/>
+  <text class="kicker" x="482" y="88">IMPLEMENTS</text>
+  <text class="role er" x="482" y="118">Executor</text>
+  <circle class="dot" cx="488" cy="146" r="2.5"/>
+  <text class="li" x="500" y="151">Separate implementation conversation</text>
+  <circle class="dot" cx="488" cy="172" r="2.5"/>
+  <text class="li" x="500" y="177">Implements and tests the task</text>
+  <circle class="dot" cx="488" cy="198" r="2.5"/>
+  <text class="li" x="500" y="203">Reports when done or blocked</text>
+  <line class="rule" x1="482" y1="222" x2="774" y2="222" stroke-width="1"/>
+  <circle class="nocirc" cx="489" cy="241" r="7" fill="none" stroke-width="1.8"/><line class="nocirc" x1="484.5" y1="236.5" x2="493.5" y2="245.5" stroke-width="1.8"/><text class="never" x="504" y="246">Never merges to the main branch</text>
+
+  <!-- ══ Conductor ══ -->
+  <rect class="cond" x="864" y="56" width="340" height="214" rx="12" stroke-width="2"/>
+  <text class="kicker" x="888" y="88">VERIFIES</text>
+  <text class="role cr" x="888" y="118">Conductor</text>
+  <circle class="dot" cx="894" cy="146" r="2.5"/>
+  <text class="li" x="906" y="151">Runs current measurements</text>
+  <circle class="dot" cx="894" cy="172" r="2.5"/>
+  <text class="li" x="906" y="177">Verifies on the branch</text>
+  <circle class="dot" cx="894" cy="198" r="2.5"/>
+  <text class="li" x="906" y="203">Merges and documents</text>
+  <line class="rule" x1="888" y1="222" x2="1180" y2="222" stroke-width="1"/>
+  <circle class="nocirc" cx="895" cy="241" r="7" fill="none" stroke-width="1.8"/><line class="nocirc" x1="890.5" y1="236.5" x2="899.5" y2="245.5" stroke-width="1.8"/><text class="never" x="910" y="246">Writes no production code</text>
+
+  <!-- ══ arrows ══ -->
+  <line class="arrow" x1="376" y1="163" x2="450" y2="163" stroke-width="1.5" marker-end="url(#b)"/>
+  <text class="edge" x="417" y="150" text-anchor="middle">prompt</text>
+  <text class="foot" x="417" y="188" text-anchor="middle" style="font-size:10.5px">self-contained</text>
+
+  <line class="arrow" x1="798" y1="163" x2="856" y2="163" stroke-width="1.5" marker-end="url(#b)"/>
+  <text class="edge" x="831" y="150" text-anchor="middle">report</text>
+  <text class="foot" x="831" y="188" text-anchor="middle" style="font-size:10.5px">structured</text>
+
+  <!-- Conductor returns to the Owner with decisions -->
+  <path class="arrow" d="M 1034 270 L 1034 306 L 206 306 L 206 270" fill="none" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#b)"/>
+  <text class="foot" x="620" y="300" text-anchor="middle">decisions · open questions · work requiring Owner approval</text>
+
+  <line class="rule" x1="36" y1="344" x2="1204" y2="344" stroke-width="1"/>
+  <text class="foot" x="36" y="370">Implementation and review use separate conversations.</text>
+  <text class="foot" x="1204" y="370" text-anchor="end">Independent review before merge.</text>
+
+  <defs>
+    <marker id="b" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="ahead" d="M 0 0 L 8 4 L 0 8 z" fill="#8c959f"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,5 @@
+mypy==1.18.2
+mypy_extensions==1.1.0
+pathspec==0.12.1
+typing_extensions==4.15.0
+tomli==2.2.1; python_version < "3.11"

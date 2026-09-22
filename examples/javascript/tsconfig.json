@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": [
+    "app/**/*.js",
+    "scripts/governance/**/*.js",
+    "tests/**/*.js"
+  ]
+}
