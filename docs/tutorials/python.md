@@ -37,7 +37,7 @@ Run these commands from the generated Python project after `npm run check` passe
 
 <!-- run:save -->
 ```bash
-git add .gitignore README.md PROJECT.md DECISIONS.md PROGRESS app scripts tests package.json package-lock.json mypy.ini requirements-dev.txt
+git add .gitignore LICENSE README.md PROJECT.md DECISIONS.md PROGRESS app scripts tests package.json package-lock.json mypy.ini requirements-dev.txt
 git commit -m "Set up Python calculator"
 ```
 

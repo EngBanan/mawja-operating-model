@@ -22,6 +22,8 @@ The examples pin tsx 4.21.0. TypeScript and JavaScript pin TypeScript 5.9.3; Pyt
 
 The documented checks are verified on Linux/WSL2 with Node.js 20.19.5, npm 10.8.2, Git 2.34.1 and, for Python, CPython 3.10.12. The Python source requires Python 3.10 or later. Verify other runtime versions and platforms in your environment.
 
+Prompt configuration and example-creator tests are also verified on native Windows with Node.js 22.16.0, npm 10.9.2 and Git 2.52.0.windows.1. This includes Git CRLF conversion and configuration paths containing spaces. The file-symlink regression runs on Linux and is skipped on Windows. Python execution remains verified on Linux/WSL2.
+
 The JavaScript example covers `.js` files with ECMAScript modules. JSX, `.mjs`/`.cjs`, project references and monorepo configurations need additional configuration and verification.
 
 The Python example covers `.py` files in app, scripts/governance and tests, with one explicit mypy.ini. Custom mypy plugins, extra stub packages and other source layouts need integration checks. Activate the project's virtual environment before running its npm commands.

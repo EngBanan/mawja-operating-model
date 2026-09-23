@@ -10,7 +10,19 @@ From the Mawja checkout, run:
 node --test tests/test_example_creator.mjs
 ```
 
-The suite checks license distribution for all three languages and verifies that missing license inputs or an existing destination are rejected without changing the destination. It uses Node.js and Git without installing dependencies. Fixtures are removed after each test; set TMPDIR to choose their parent directory.
+The suite checks license distribution and the tutorial save commands for all three languages, and verifies that missing license inputs or an existing destination are rejected without changing the destination. It uses Node.js and Git without installing dependencies. Fixtures are removed after each test; set TMPDIR to choose their parent directory.
+
+## Prompt configuration
+
+Create a TypeScript example outside the Mawja checkout and install its pinned dependencies:
+
+```bash
+node examples/create.mjs typescript ../mawja-test-runtime
+npm ci --prefix ../mawja-test-runtime
+node tests/test_prompt_configuration.mjs ../mawja-test-runtime
+```
+
+The suite runs the generated prompt tool and real TypeScript checker in isolated Git repositories. It covers Git line-ending conversion, nested configuration paths, uncommitted and ignored configuration, index flags that hide changes, and clean filters that could conceal different configuration content. File-symlink checks run where creating symlinks does not require Windows privileges. Fixtures are removed after each test; set TMPDIR (TEMP on Windows) to choose their parent directory.
 
 ## Python baseline checker
 

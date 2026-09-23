@@ -15,8 +15,8 @@
  * The generator measures repository state and leaves task content as placeholders.
  */
 import { execFileSync, execSync } from "node:child_process"
-import { existsSync, readFileSync, realpathSync, writeFileSync } from "node:fs"
-import { dirname, join, relative, resolve } from "node:path"
+import { existsSync, lstatSync, readFileSync, realpathSync, writeFileSync } from "node:fs"
+import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path"
 import { fileURLToPath } from "node:url"
 /**
  * Shared ledger parser. Keep this file beside check-debt-ledger.ts.
@@ -217,8 +217,9 @@ function measureGates(): number {
  * Other untracked files produce a warning. MEASURED_EXT and MEASURED_FILE
  * must describe the project's measurement inputs.
  */
+const gitPath = (path: string) => relative(ROOT, path).split(sep).join("/")
 const esc = (p: string) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-const MEASURED_FILE = new RegExp(`^(${[DEBT_LEDGER, DECISION_LOG, BASELINE_FILE, relative(ROOT, join(CODE, "package.json"))].map(esc).join("|")})$`)
+const MEASURED_FILE = new RegExp(`^(${[DEBT_LEDGER, DECISION_LOG, BASELINE_FILE, gitPath(join(CODE, "package.json"))].map(esc).join("|")})$`)
 
 function measureGit(configurationFiles: string[]) {
   // Measurement requires a committed HEAD; an empty repository exits 2.
@@ -233,7 +234,7 @@ function measureGit(configurationFiles: string[]) {
   // Preserve porcelain status whitespace and NUL-delimited paths.
   // Do not trim the output before parsing.
   const entries = execFileSync("git", ["status", "--porcelain=v1", "-z", "--untracked-files=all"], { cwd: ROOT, encoding: "utf8" }).split("\0")
-  const measuredConfiguration = new Set(configurationFiles.map((p) => relative(ROOT, resolve(CODE, p))))
+  const measuredConfiguration = new Set(configurationFiles.map((p) => gitPath(resolve(CODE, p))))
   const tracked: string[] = []
   const untrackedMeasured: string[] = []
   const untrackedInert: string[] = []
@@ -247,19 +248,28 @@ function measureGit(configurationFiles: string[]) {
     } else tracked.push(path)
     if (/[RC]/.test(status)) i++ // porcelain -z carries the source path after a rename/copy
   }
-  // HEAD bytes, not index membership or porcelain: ignored files and
-  // skip-worktree flags cannot certify that configuration travels with a commit.
+  // Compare with HEAD even when Git status hides a path. Accept EOL-only
+  // differences only when Git hashes the current bytes to the committed blob.
+  // Other clean-filter transformations cannot certify checker configuration.
   const configurationProblems: string[] = []
   for (const input of configurationFiles) {
     const path = resolve(CODE, input)
     try {
       for (const actual of new Set([path, realpathSync(path)])) {
-        const rel = relative(ROOT, actual)
-        if (!rel || rel === ".." || rel.startsWith("../")) throw new Error("outside repository")
-        // Refuse symlink config instead of mistaking its committed link text for content.
-        const bytes = execFileSync("git", ["show", `HEAD:${rel}`], { cwd: ROOT, stdio: ["ignore", "pipe", "pipe"] })
+        const rel = gitPath(actual)
+        if (!rel || rel === ".." || rel.startsWith("../") || isAbsolute(rel)) throw new Error("outside repository")
+        // Require a regular file in both HEAD and the worktree, not a symlink.
+        const entry = execFileSync("git", ["--literal-pathspecs", "ls-tree", "-z", "HEAD", "--", rel], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] })
+        const blob = /^(?:100644|100755) blob ([0-9a-f]+)\t([^\0]+)\0$/.exec(entry)
+        if (!blob || blob[2] !== rel || !lstatSync(actual).isFile()) throw new Error("not a committed regular file")
+        const bytes = execFileSync("git", ["cat-file", "blob", blob[1]], { cwd: ROOT, stdio: ["ignore", "pipe", "pipe"] })
         const current = readFileSync(actual)
-        if (bytes.length !== current.length || bytes.some((byte, i) => byte !== current[i])) throw new Error("differs from HEAD")
+        if (!bytes.equals(current)) {
+          const oid = execFileSync("git", ["hash-object", `--path=${rel}`, "--stdin"], { cwd: ROOT, input: current, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }).trim()
+          // latin1 preserves every byte; only CRLF pairs are normalized here.
+          if (oid !== blob[1] || bytes.toString("latin1").replace(/\r\n/g, "\n") !== current.toString("latin1").replace(/\r\n/g, "\n"))
+            throw new Error("differs from HEAD")
+        }
       }
     } catch { configurationProblems.push(input) }
   }

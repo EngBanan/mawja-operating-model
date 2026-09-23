@@ -10,7 +10,7 @@ Run these commands from the generated project after `npm run check` passes. Git 
 
 <!-- run:save -->
 ```bash
-git add .gitignore README.md PROJECT.md DECISIONS.md PROGRESS app scripts tests package.json package-lock.json tsconfig.json
+git add .gitignore LICENSE README.md PROJECT.md DECISIONS.md PROGRESS app scripts tests package.json package-lock.json tsconfig.json
 git commit -m "Set up calculator example"
 ```
 
