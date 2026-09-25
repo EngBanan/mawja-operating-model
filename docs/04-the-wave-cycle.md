@@ -6,7 +6,7 @@ A wave is one task with a defined scope, one Git branch and a checklist of requi
 |---|---|---|
 | 1 | Measure current state | Run current checks; record commands and results |
 | 2 | Plan batches | Use small logical batches with one commit per batch |
-| 3 | Implement | Run the relevant checks after each batch and each new behavior check after adding it. Run the full required suites when implementation is complete; the push hook runs configured environment checks |
+| 3 | Implement | Run targeted checks during each batch. Complete the required suites on the final commit through the enforcing hook, or manually if the hook does not run them. Avoid a duplicate successful run with unchanged inputs |
 | 4 | Verify independently | Review and measure the implementation branch |
 | 5 | Review failure cases | Apply the review requirements for the sensitivity class |
 | 6 | Resolve findings | Fix defects or record numbered debt with a closure condition |
@@ -22,7 +22,17 @@ The Executor implements the correction on a new branch. If the original merge wa
 
 ## Verification at both stages
 
-The Executor verifies the implementation before reporting. The Conductor then runs independent verification on the branch. The two stages have separate evidence and responsibilities.
+The Executor verifies the implementation before reporting. The Conductor then runs independent verification on the branch. The two stages have separate evidence and responsibilities. The Conductor reviews existing suite evidence and performs the task-specific guard checks, independent mutation and claim check; independent review does not require replaying every successful full suite without a reason.
+
+## Plan verification
+
+Name the targeted checks for each batch, the final required suites, who runs them and the Conductor's independent checks. Include affected guards and visual surfaces. Use [Section 9](09-the-verification-protocol.md#schedule-checks) to decide when results remain applicable and when a rerun is required.
+
+Run the verifier once per unchanged verification stage. A fix, changed input, incomplete evidence or a specific review concern requires the affected checks again. Keep every required gate blocking; a failed run is not the completed verification for that stage.
+
+## Background work
+
+Use completion notifications when the tool supports them. Set a completion or stall deadline and keep the Owner informed. If a notification is unavailable, late or lost, use bounded status checks to establish the result. Start ready follow-up work together only when its dependencies and file ownership allow it.
 
 ## Scope and dependencies
 
@@ -32,7 +42,7 @@ The Executor verifies the implementation before reporting. The Conductor then ru
 - Low- or medium-sensitivity tasks may run in parallel when their files and outputs are independent, each on its own branch.
 - Run high-sensitivity work in isolation, without another wave in parallel.
 
-Measurement may be delegated within [the boundaries in Section 3](03-why-a-separate-conversation.md). Implementation remains in its assigned conversation.
+Measurement and the Executor's helper assignments follow [the boundaries in Section 3](03-why-a-separate-conversation.md). The Executor remains responsible for implementation; the Conductor remains responsible for independent review.
 
 ---
 

@@ -18,7 +18,7 @@ The workflow is designed for an individual working with agents. Larger teams sho
 
 ## Cost
 
-Preparing complete tasks and running independent verification takes time and compute. The cost depends on scope, environment and check duration.
+Preparing complete tasks and running independent verification takes time and compute. The cost depends on scope, environment and check duration. Use a [verification plan](04-the-wave-cycle.md#plan-verification) to avoid duplicate successful runs and unrelated visual work. Reduced repetition does not establish that coverage is complete.
 
 ## Check execution
 
@@ -28,7 +28,7 @@ A script must be connected to the project's runner, CI or hook to enforce a rule
 
 The Owner passes prompts and reports between conversations. Mawja does not coordinate those conversations or recover lost ones automatically.
 
-If an implementation conversation is lost, preserve the branch commits. Start a fresh Executor with the task prompt and a record of completed work, then repeat verification in full.
+If an implementation conversation is lost, preserve the branch commits and check evidence. Start a fresh Executor with the task prompt and a record of completed work. Establish the current state, rerun missing or inapplicable checks and complete independent review. A result from a different environment or an unverifiable state cannot stand in for a current measurement.
 
 ## Check routing
 

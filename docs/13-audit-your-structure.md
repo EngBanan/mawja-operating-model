@@ -10,6 +10,11 @@ Inspect the repository's files and run its configured checks before marking item
 - [ ] The Conductor verifies the implementation branch and its behavior.
 - [ ] The reviewer's mutation differs from the Executor's cases.
 - [ ] Mutations test incorrect values as well as absence where relevant.
+- [ ] The verification plan names targeted checks, final suites and their runner, with reasons for necessary reruns.
+- [ ] Mutation selection covers new, modified and affected guards; repeats name the affected behavior, and unchanged guards considered in the task have a reason for no repeat.
+- [ ] Visual evidence covers named affected surfaces, including shared-component effects; unmeasured behavior is declared.
+- [ ] Helper tasks follow the closed allowlist, restrictions take precedence, and the Executor reviews every changed line.
+- [ ] Background work has a completion or stall deadline and a fallback when notifications are unavailable.
 - [ ] Known debt has numbered records; deliberate deferrals have documented triggers.
 - [ ] Debt closure conditions are recorded when the item is discovered.
 - [ ] Closure markers follow a fixed, machine-readable convention.

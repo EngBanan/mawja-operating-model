@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "allowReuse": false,
+  "maxAgeSeconds": 3600,
+  "scope": "Calculator addition: zero, positive, mixed-sign and negative inputs. All four cases must pass.",
+  "externalInputs": [],
+  "checks": [
+    {
+      "id": "calculator",
+      "command": [
+        "node",
+        "scripts/checks/calculator.mjs"
+      ],
+      "timeoutSeconds": 60,
+      "reuse": "local-read-only",
+      "cases": [
+        "zero",
+        "positive",
+        "mixed-sign",
+        "negative"
+      ]
+    }
+  ]
+}

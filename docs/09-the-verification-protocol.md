@@ -12,6 +12,32 @@ The Conductor completes these steps before merging. The toolkit can automate che
 
 Run the existing checks for behavior the change could affect, even if their command definitions did not change. The verifier discovers newly added or changed manifest commands; it cannot infer every affected behavior.
 
+## Schedule checks
+
+During implementation, run checks targeted at the behavior changed in each batch. Complete all required suites on the final commit using the project's existing acceptance criteria. If the enforcing hook runs those suites, its run is the final run; do not run an identical successful suite manually immediately before it. If it does not, run the missing suites explicitly. The hook still runs and remains blocking.
+
+A result applies to its commit, working tree, command, scope, acceptance criteria, tool versions, environment and relevant external state. Record these with the complete output. Do not repeat an accepted result with identical inputs without a reason. After a fix, changed input, missing evidence or a specific review concern, rerun the affected checks and their dependents. Record the reason; there is no fixed limit on necessary retries.
+
+When existing acceptance criteria allow an error budget or a reviewed failure baseline, record that criterion and the remaining failures. An accepted gate result does not mean every underlying test passed.
+
+The Conductor inspects the suite evidence and still runs the task-specific checks in the table above. Reading the Executor's report alone is not independent verification. Different environments require their own evidence.
+
+When a hook fails, collect other independently measurable blockers and address them before retrying. Do not run a stage whose prerequisite failed. Follow the hook's implemented retry behavior; documentation or a saved log cannot authorize bypassing it. The optional [check runner](../scripts/CHECK_REUSE.md) provides a default-off reuse path for eligible local checks. Its [adoption requirements](../AGENT_GOVERNANCE_KIT.md#optional-hook-result-reuse) still apply; it does not make stateful checks eligible or replace the enforcing hook.
+
+## Select mutation evidence
+
+Prove new or modified guards and existing guards whose execution or coverage is affected. Review changes to runners, configuration, discovery, helpers, fixtures, dependencies and protected behavior, even when the guard file is unchanged. Choose mutations that address the affected failure cases; do not automatically replay every historical mutation.
+
+When repeating a previously accepted mutation, name the change in execution or coverage, missing evidence or specific review concern that requires it. For existing guards considered in the task whose execution and coverage remain unchanged, record why their mutations were not repeated; group guards that share the same reason. This does not require listing unrelated guards.
+
+Keep relevant behavior tests and the Conductor's different, independently chosen mutation. One mutation does not establish coverage of every affected case. Preserve failure from the intended assertion and a passing result after restoration.
+
+## Limit visual evidence to affected surfaces
+
+Name the screens, print layouts and other visual outputs affected by the task, including indirect effects from shared components or styles. Capture evidence for those surfaces. If another affected surface is discovered, add it to the plan with the reason. Avoid unrelated screenshot rounds.
+
+This scopes visual evidence, not functional coverage. Claim automated coverage only for behavior that actual checks exercise, and record what remains unmeasured.
+
 ## Check adjacent behavior
 
 A guard may test one route while missing another that uses the same code. Identify the affected screens, routes and API endpoints, and test each relevant entry point.

@@ -36,3 +36,15 @@ python -B -m unittest discover -s tests -v
 The suite creates isolated Git repositories and checks real mypy diagnostics, syntax failures, snapshot protection, per-file budgets, missing inputs and configuration errors. Controlled subprocess output is used only for parser failure cases. Fixtures are removed after each test; set TMPDIR to choose their parent directory.
 
 For a complete project workflow, follow the [Python walkthrough](../docs/tutorials/python.md) and [integration validation](../scripts/VALIDATION.md).
+
+## Optional check runner
+
+From the Mawja checkout, run:
+
+```bash
+node --test tests/test_check_runner.mjs
+```
+
+The suite uses real Git repositories and subprocesses to exercise fresh execution, explicit reuse, the off switch, changed inputs, incomplete reports, expired evidence, failure history with reuse disabled, interrupted attempts and required later-stage failures. It also checks environment-value redaction in metadata. Fixtures use TMPDIR (TEMP on Windows) and are removed after each test.
+
+For a real application exercise in all three languages, follow [check-result reuse](../scripts/CHECK_REUSE.md#try-the-calculator-example). Introduce an incorrect calculator operation, confirm the check fails, restore it and confirm a fresh success. To validate a customized integration, also exercise the entire enforcing hook with reuse disabled and enabled.

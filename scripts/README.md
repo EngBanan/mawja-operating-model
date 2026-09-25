@@ -15,8 +15,9 @@ For a first run, use the [runnable TypeScript, JavaScript and Python examples](.
 | `types:init` / `types:update` | Create a type snapshot, or lower an existing snapshot |
 | `lint:debt-ledger:strict` | Validate debt numbers and closure markers |
 | `gates:count` | Count registered guard commands |
+| `checks:run` | Run explicit local checks, with optional verified-result reuse |
 
-The examples define these commands in their package manifests. See [language support](LANGUAGES.md) for requirements and scope.
+The examples define these commands in their package manifests. `checks:run` is optional; follow the [check-result reuse guide](CHECK_REUSE.md) to configure it. See [language support](LANGUAGES.md) for requirements and scope.
 
 ## Installation
 
@@ -98,7 +99,7 @@ Open `WAVE_PROMPT_MY_CHANGE.md` and replace every `⟪…⟫` placeholder with t
 npm run wave:check -- WAVE_PROMPT_MY_CHANGE.md
 ```
 
-Expected: `Ready to issue`. Keep the measured table unchanged; place additional observations in the task's own section.
+Expected: `Ready to issue`. Keep the measured table unchanged; place additional observations in the task's own section. Complete the verification plan and named helper assignments using [the prompt guide](../docs/05-the-wave-prompt.md#verification-and-helper-assignments). Readiness checks fields and measurements, not whether the plan is sufficient.
 
 ## Verify a branch
 
@@ -109,7 +110,7 @@ git switch wave/my-change
 npm run wave:verify -- --base=main --branch=wave/my-change --claim="npm test"
 ```
 
-The verifier checks Git state, type budgets, newly registered or changed guard commands, and the supplied claim command. Run unchanged inherited checks separately. Complete the [independent verification procedure](../docs/09-the-verification-protocol.md) before accepting the change.
+The verifier checks Git state, type budgets, newly registered or changed guard commands, and the supplied claim command. Include affected inherited checks in the verification plan even when their commands are unchanged. Use the enforcing runner for full suites and retain the Conductor's task-specific checks; see the [verification schedule](../docs/09-the-verification-protocol.md#schedule-checks). Complete the independent verification procedure before accepting the change. For an eligible local check, the optional [check runner](CHECK_REUSE.md) can reuse a verified result after adoption review. It is disabled by default and does not replace this independent review.
 
 ## Update project copies
 
@@ -122,6 +123,8 @@ The verifier checks Git state, type budgets, newly registered or changed guard c
 Updating the Mawja checkout alone does not update project copies.
 
 ## Exit codes
+
+The optional check runner returns `0` for acceptance and `1` for any blocking failure. The other toolkit commands use these codes:
 
 | Code | Meaning |
 |---|---|

@@ -46,6 +46,9 @@ Open `WAVE_PROMPT_SUBTRACT.md` and complete every placeholder:
 | Batch | Calculator function, subtraction guard, test and command registration |
 | Debt | Item #1; leave it open until independent review confirms closure |
 | Constraints | English documentation; no external services, database or billing |
+| Verification plan | Targeted checks during implementation; complete `npm run check` on the final commit because this example has no enforcing hook; branch verification and the reviewer's independent checks |
+| Helpers | None; the Executor implements the calculator, guard and tests |
+| Visual evidence | Not applicable: this task has no UI or print layout |
 | Exit checks | Type checking, all tests, deliberate fault and restoration |
 | Branch and sensitivity | `wave/subtract`; low sensitivity |
 | Measurements | Preserve the generated table and commands |
@@ -125,9 +128,9 @@ Run this block from the generated TypeScript project:
 ```bash
 npm pkg set 'scripts.test:subtract=node --import tsx scripts/governance/check-subtract.ts && node --import tsx tests/subtract.test.ts'
 npm pkg set 'scripts.test=npm run test:add && npm run test:calc && npm run test:subtract'
-npm run check
 git add app/calc.ts scripts/governance/check-subtract.ts tests/subtract.test.ts package.json
 git commit -m "Add calculator subtraction"
+npm run check
 ```
 
 ### Register and commit: JavaScript
@@ -138,9 +141,9 @@ Run this block from the generated JavaScript project:
 ```bash
 npm pkg set 'scripts.test:subtract=node scripts/governance/check-subtract.js && node tests/subtract.test.js'
 npm pkg set 'scripts.test=npm run test:add && npm run test:calc && npm run test:subtract'
-npm run check
 git add app/calc.js scripts/governance/check-subtract.js tests/subtract.test.js package.json
 git commit -m "Add calculator subtraction"
+npm run check
 ```
 
 ## Verify the result

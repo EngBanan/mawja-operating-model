@@ -15,7 +15,7 @@ src/store.ts
 
 ## What the tool did
 
-The Conductor checks out the wave's branch and reruns the inherited store and shape tests as part of step ①. These are regression checks; they are not the independent command for step ④.
+The Conductor inspects the final hook evidence for the reported commit, then checks out the wave's branch and runs the task-specific store and shape tests in the reviewer's environment as part of step ①. This does not replay the complete hook suite. These regression checks are separate from the independent command for step ④.
 
 ```
 $ git switch wave/w3-atomic-save

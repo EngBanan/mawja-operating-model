@@ -46,6 +46,10 @@ Your goal: a process crash or kill during save leaves a complete notes file on t
 2. `scripts/governance/check-save-atomic.ts`: kill the saving process during repeated writes and refuse any file that fails to parse. Register `test:save-atomic` in package.json. One commit.
 3. Mark existing debt #7 closed with evidence. Propose decision #10 in the report; do not write DECISIONS.md. One commit.
 
+Verification plan: run store and shape checks during the affected batches and prove the new atomic-save guard with a targeted mutation. The local hook runs the complete required suites on the final commit; do not duplicate that run manually. The Conductor runs task-specific checks, a different mutation and a separate CLI probe. Rerun affected checks after a fix or changed input.
+
+Helper assignments: none. The Executor implements the storage change and the guard. No UI or print layout is affected, so no screenshots are required. If that scope changes, update the plan before acceptance.
+
 ## Step 6: Hard constraints (fixed)
 - Language of everything the owner reads: plain English, no jargon.
 - No new dependency.

@@ -380,7 +380,7 @@ ${measuredTable(m)}
 ## Step 4: The scope
 
 ### ✅ In scope
-⟪TODO: what is explicitly delivered⟫
+⟪TODO: what is explicitly delivered, including affected screens and visual outputs and indirect effects from shared components or styles⟫
 
 ### ⛔ Out of scope: debt and deferred work
 ⟪TODO: list debt identifiers and deferred work, including each deferral's record and condition for reconsideration⟫
@@ -389,7 +389,19 @@ ${measuredTable(m)}
 
 ## Step 5: Batch order
 
-⟪TODO: logical batches in order · each batch = one commit · and what you do yourself versus what may be delegated⟫
+⟪TODO: logical batches in order, with one commit per batch⟫
+
+**Verification plan:** ⟪TODO: targeted checks per batch; final required suites and who runs them; what the enforcing hook covers; affected guards and mutation cases; named visual evidence; the Conductor's independent checks⟫
+
+**Helper assignments:** ⟪TODO: name each bounded helper task and its files, or state none; identify restricted parts, question routing and how you will review every changed line⟫
+
+Helpers may implement UI components and presentation, printing and exports, user-facing text, and ordinary behavior tests. Everything outside this closed allowlist stays with the Executor unless the Owner expands it by name.
+
+Restrictions take precedence: helpers must not implement money handling, any AI or paid-provider call, personal or sensitive data handling or isolation, schema changes or migrations, permissions or access decisions, security checks, governance gates, verification tools, enforcing hooks or mutations that prove guards. Classify the behavior, not the filename. Separate mixed work; if it cannot be separated, implement it yourself.
+
+Review every helper change and record its scope and decisions. A helper pauses work that depends on an unapproved decision and raises the question with you; resolve it within your authority or ask the Owner. Helper work does not replace the Conductor's independent review.
+
+For background work, use completion notifications when supported, with a completion or stall deadline. Use bounded status checks if the notification is unavailable, late or lost. Keep the Owner informed and respect dependencies before starting follow-up work.
 
 ---
 
@@ -402,10 +414,13 @@ ${measuredTable(m)}
 | **Limits** | Every operational limit must be configurable at runtime. Do not hard-code it in the source. Name the gate that enforces it: ⟪TODO: your operational-limits gate⟫ |
 | **Isolation** | ⟪TODO: your data-access rule: which layer alone may reach the database, and what every function that reads a user's data takes as its first argument⟫ |
 | **Money** | ⟪TODO: your single conversion point from raw cost to a charged amount, and the one module a monetary constant may live in⟫ |
-| **The guard** | Each guard must detect a relevant mutation, then pass after restoration. Follow Section 9 for removal and incorrect-value mutations. |
+| **The guard** | Prove new, modified or affected guards with targeted mutations, including effects through runners, configuration, discovery, fixtures, dependencies or protected code. Confirm the intended assertion fails and then passes after restoration. Include missing behavior and incorrect values where relevant, as specified in Section 9. Do not replay every historical mutation automatically; preserve the Conductor's different mutation. |
+| **Checks** | Run targeted checks during work and complete required suites on the final commit using existing acceptance criteria. If the enforcing hook runs those suites, do not duplicate its successful run manually. Run missing suites explicitly. Run the verifier once per unchanged verification stage; fixes, changed inputs, incomplete evidence or a specific review concern require affected checks again. |
+| **Evidence** | Record each result's command, commit, tree, environment, inputs, scope, acceptance criteria and complete output. Reuse between hook attempts requires a reviewed integration that verifies eligibility and inputs. The optional run-checks.mjs tool is disabled by default; copying it does not establish eligibility. An older success cannot override a later failed or unfinished check, even if reuse was disabled then. Keep gates blocking and never bypass them with git push --no-verify. |
+| **Visual evidence** | Capture named affected surfaces, including shared-component effects. Add newly discovered impacts with a reason. Do not claim the hook covers unmeasured behavior. |
 | **\`${TYPE_LABEL}\`** | Does not exceed **${m.tscCount}** · and the crash class is **zero** |
 | **The tree** | Clean at handover. ⛔ No leftover temporary scripts |
-| **Pushing** | Confirm required hook services are available before pushing. Governance gates must remain blocking. Any environment exception must be scoped to that environment and preserve the rule. |
+| **Pushing** | Confirm required hook services are available. After a failure, collect independently measurable blockers before retrying; do not run stages with failed prerequisites. An out-of-memory event or timeout alone does not prove an environmental cause. Follow the hook's implemented behavior and keep governance gates blocking. |
 
 ---
 
@@ -414,10 +429,14 @@ ${measuredTable(m)}
 | # | Item | ✅ |
 |---|---|---|
 | 1 | \`${TYPE_LABEL}\` ≤ **${m.tscCount}** and the crash class is zero | ☐ |
-| 2 | Keep the **${m.gates}** inherited gates, run the changed wave guards, and report the final gate count | ☐ |
+| 2 | Keep the **${m.gates}** inherited gates, run new, changed and affected checks, and report the final gate count | ☐ |
 | 3 | No regressions in existing behavior | ☐ |
 | 4 | Incremental commits: one per batch | ☐ |
 | 5 | The tree is clean and the branch is pushed | ☐ |
+| 6 | Required suites meet the acceptance criteria on the final commit; evidence and reasons for any reruns are recorded | ☐ |
+| 7 | New, modified or affected guards have targeted mutation evidence and pass after restoration | ☐ |
+| 8 | Named visual evidence is complete, with newly identified impacts and unmeasured behavior reported | ☐ |
+| 9 | Helper work follows the allowlist and restrictions; every changed line was reviewed and decisions recorded | ☐ |
 | ⟪…⟫ | ⟪TODO: this wave's specific gates, the behavior each guard checks, and the deliberate fault it must detect⟫ | ☐ |
 
 ---
@@ -427,10 +446,13 @@ ${measuredTable(m)}
 1. **The branch** \`⟪TODO: the branch name⟫\`: a commit per batch, then push it.
 2. The Conductor merges to \`main\` and writes \`${DECISION_LOG}\` at merge time. Include proposed decisions in your report.
 3. **Debt rows**: mark what was actually delivered closed with evidence; the Conductor checks and confirms closure at merge. Record new debt **starting at #${m.nextNumber}**. Deliberate deferrals go in their own file with a trigger.
-4. **A structured final report** containing exactly:
+4. **A structured final report** covering:
    - every number in Step 2 you re-measured: **matched / differed (with the new value)**
    - what was delivered · and what was not and why
-   - the guard added or updated, the deliberate fault it detected, and the passing result after restoration
+   - new, modified or affected guards, why each was selected, the fault detected and the passing result after restoration
+   - for existing guards considered in this task, what changed or why no repeated mutation was needed; group guards with the same reason
+   - check commands, commit, environment, scope, complete output and reasons for any necessary reruns
+   - named visual evidence and limits; helper assignments, decisions and your review of their changes
    - **what I could not measure and why** (required)
    - the cost of any AI call as a number · and the branch name and commit hash
 
@@ -440,11 +462,12 @@ ${measuredTable(m)}
 
 **Sensitivity rating: ⟪TODO: 🔴 high / 🟡 medium / 🟢 low⟫**: use the higher class when uncertain.
 
-**After you have finished everything above and pushed the branch, print exactly:**
+**After completing the required work and pushing the branch, deliver the full Step 8 report with its evidence. End the report with this status summary:**
 
 \`\`\`
 🛑 Wave ${title} is ready.
    Branch: ⟪TODO⟫   Commit: <hash>
+   Report and evidence: <path or link to the complete Step 8 report and supporting output>
    Delivered: <a two-item summary>
    Measurements changed since task preparation: <the list or "none">
    Guard + mutation: <protected behavior · fault introduced · failure and restoration results>

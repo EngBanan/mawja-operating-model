@@ -73,6 +73,9 @@ Complete every `⟪…⟫` placeholder in `WAVE_PROMPT_SUBTRACT.md`:
 | Batch | Calculator function, subtraction guard, test and command registration in one commit |
 | Debt | Keep item #1 open until independent review confirms closure |
 | Constraints | English documentation; no external services, database or billing |
+| Verification plan | Targeted checks during implementation; complete `npm run check` on the final commit because this example has no enforcing hook; branch verification and the reviewer's independent checks |
+| Helpers | None; the Executor implements the calculator, guard and tests |
+| Visual evidence | Not applicable: this task has no UI or print layout |
 | Exit checks | Type checking, all tests, deliberate fault and restoration |
 | Branch and sensitivity | `wave/subtract`; low sensitivity |
 | Measurements | Keep the generated table and commands unchanged |
@@ -128,15 +131,15 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-From the Python project directory, register the guard, run the checks and commit:
+From the Python project directory, register the guard, commit the change and run the checks:
 
 <!-- run:implement -->
 ```bash
 npm pkg set 'scripts.test:subtract=python -B -m scripts.governance.check_subtract'
 npm pkg set 'scripts.test=npm run test:add && npm run test:calc && npm run test:subtract'
-npm run check
 git add app/calc.py scripts/governance/check_subtract.py tests/test_subtract.py package.json
 git commit -m "Add calculator subtraction"
+npm run check
 ```
 
 The `test:calc` command discovers both `tests/test_calc.py` and `tests/test_subtract.py`.

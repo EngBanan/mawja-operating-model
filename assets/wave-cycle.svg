@@ -46,8 +46,8 @@
   <!-- 02 -->
   <rect class="card" x="36" y="192" width="232" height="70" rx="10" stroke-width="1.5"/>
   <text class="num" x="54" y="216">02</text>
-  <text class="ttl" x="54" y="238">Plan the batches</text>
-  <text class="sub" x="54" y="256">One batch, one commit.</text>
+  <text class="ttl" x="54" y="238">Plan batches and checks</text>
+  <text class="sub" x="54" y="256">Name checks and helper tasks.</text>
 
   <line class="arrow" x1="268" y1="227" x2="304" y2="227" stroke-width="1.5" marker-end="url(#a)"/>
 
@@ -55,8 +55,8 @@
   <rect class="card" x="314" y="192" width="188" height="88" rx="10" stroke-width="1.5"/>
   <text class="num" x="332" y="216">03</text>
   <text class="ttl" x="332" y="238">Implement</text>
-  <text class="sub" x="332" y="256">Implement in</text>
-  <text class="sub" x="332" y="274">a separate conversation.</text>
+  <text class="sub" x="332" y="256">Implement and run</text>
+  <text class="sub" x="332" y="274">targeted checks.</text>
 
   <line class="arrow" x1="502" y1="140" x2="544" y2="140" stroke-width="1.5" marker-end="url(#a)"/>
   <path class="arrow" d="M 408 192 L 408 160 L 502 160 L 502 140" fill="none" stroke-width="1.5"/>
@@ -65,8 +65,8 @@
   <rect class="accent" x="550" y="82" width="384" height="94" rx="10" stroke-width="2"/>
   <text class="num" x="570" y="106">04</text>
   <text class="ttl at" x="570" y="128">Independent verification</text>
-  <text class="sub" x="570" y="150">Review the implementation branch.</text>
-  <text class="sub" x="570" y="168">Executor checks, then independent review.</text>
+  <text class="sub" x="570" y="150">Review evidence and affected behavior.</text>
+  <text class="sub" x="570" y="168">Independent faults and claim checks.</text>
 
   <line class="arrow" x1="742" y1="176" x2="742" y2="196" stroke-width="1.5" marker-end="url(#a)"/>
 

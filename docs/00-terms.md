@@ -36,6 +36,7 @@ Use this page when a term appears in a task, command output or report.
 |---|---|
 | <a id="agent"></a>**Agent** | A program that uses a language model and tools to carry out a task. |
 | <a id="subagent"></a>**Subagent** | An agent given a bounded task by another agent. Available tools, context and interaction depend on the platform. |
+| <a id="helper"></a>**Helper** | A subagent assigned bounded work by the Executor under the [helper implementation rules](03-why-a-separate-conversation.md#helper-implementation). The Executor remains responsible for its changes. |
 | <a id="prompt"></a>**Prompt** | The task instructions, constraints and expected report. |
 | <a id="context-window"></a>**Context window** | The information available to the model in the current interaction. |
 | <a id="autonomous-loop"></a>**Autonomous loop** | Repeated planning, execution and measurement within an authorized scope and defined stopping conditions. |

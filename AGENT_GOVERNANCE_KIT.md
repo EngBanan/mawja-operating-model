@@ -1,6 +1,6 @@
 # Multi-tool governance
 
-**Version 1.0** · An extension to Mawja for repositories using more than one agent tool.
+**Version 1.1** · An extension to Mawja for repositories using more than one agent tool.
 
 Reference this file from the repository's rules. If linking is impractical, keep one copy in the repository root. Maintain one authoritative source.
 
@@ -152,8 +152,27 @@ This kit has no gate that checks whether repository knowledge is complete, hando
 - If a guard's own compliance change invalidates its check, document the cycle in the affected item's record. Do not suppress it with an exception.
 - Preserve complete command output, including the failure cause.
 - Verify committed content rather than relying on the current working-tree copy.
-- Run the exact command and environment used by the enforcing hook.
-- Investigate the original error before attributing a passing serial rerun to contention.
+- Use the enforcing hook's actual commands and environment for final checks. If the hook runs the complete required suites, do not duplicate their successful run immediately before it; follow the [verification schedule](docs/09-the-verification-protocol.md#schedule-checks).
+- Select mutation evidence for new, modified or affected guards; preserve the Conductor's independent checks.
+- Follow the [background-work procedure](docs/04-the-wave-cycle.md#background-work) instead of unnecessary polling or unbounded waiting.
+- Investigate the original error before attributing a passing serial rerun to contention. An out-of-memory event or timeout is an observed symptom, not proof of an environmental root cause. Report an unresolved cause as unresolved; the failure remains blocking.
+
+### Optional hook result reuse
+
+The optional [check runner](scripts/CHECK_REUSE.md) supports verified-result reuse for reviewed, deterministic local checks. Reuse is disabled by default. Its eligibility and environment requirements must be independently verified for the adopting project. The runner does not install or replace a hook; preserve the hook's other required checks. A saved log alone cannot substitute for a required run.
+
+An implementation must meet these requirements:
+
+- Name the eligible suites and establish reproducible inputs. Review what each command and its wrappers execute; a command name alone does not establish eligibility. Match the commit, tracked and untracked tree, relevant ignored inputs, comparison ref when it affects selection, command, scope, acceptance criteria, hook configuration, dependency locks, tool versions and environment.
+- Validate relevant external state and required outputs. A database address is not a fingerprint of its contents. Rerun suites using mutable services or browser/database state unless isolated reproducible state and required outputs can be verified. Rerun dependent checks as well. A changed input invalidates the result; a matching commit alone is insufficient.
+- Verify that inputs remain stable throughout the original run, recheck them before relying on its result and at the end of the new attempt, and reject reuse if they change or cannot be verified. Restore a required output through a fresh run if it cannot be validated.
+- Accept only complete check runs that meet the recorded acceptance criteria. Reject failed, skipped, interrupted or unrun checks, and missing, expired or mismatched records. If existing criteria allow a reviewed failure baseline or error budget, retain it and disclose the remaining failures; an accepted gate is not a claim that every test passed.
+- A later failed, interrupted or unfinished execution for the same inputs invalidates an older success, including executions with reuse disabled. If the intervening execution history cannot be verified, run the check again. A delivery failure after completed checks does not itself invalidate their results, but retry through the enforcing hook and verify eligibility again.
+- Report each reused result's suite, original time, commit, input fingerprint and evidence location. Distinguish reuse from a check executed now. Set a maximum age and an explicit off switch, and keep secrets out of the records. Reuse must not refresh the original result's age.
+- Validate the implementation with reuse disabled on the change that introduces it. Prove rejection of changed inputs or external state, incomplete records, missing outputs, expired results and success superseded by a later failed or unfinished run, including while reuse was disabled. Check truthful reporting with targeted faults.
+- Before enabling reuse in normal work, complete an isolated hook attempt with reuse enabled, covering receipt creation, validation, consumption and finalization. Verify that a failed required check still blocks acceptance. Accepted receipts during an interrupted attempt do not prove that the complete hook can finish correctly.
+
+Keep all required checks blocking. These conditions define adoption requirements; they do not establish that a project's hook implements them.
 
 ## 4 · Completion checklist
 
@@ -184,3 +203,4 @@ When using a local copy, synchronize it from this source instead of maintaining 
 | Version | Change |
 |---|---|
 | 1.0 | First published edition |
+| 1.1 | Define proportionate verification and requirements for optional hook result reuse |

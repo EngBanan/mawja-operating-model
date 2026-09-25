@@ -4,7 +4,7 @@ Work within this repository. The calculator currently supports addition.
 
 - Preserve addition and signed-number behavior.
 - Keep application code in app, behavior guards in scripts/governance, and tests in tests.
-- Run `npm run check` before handing over a change.
+- Run targeted checks during implementation and `npm run check` on the final commit before handover. Repeat affected checks after a fix or changed input. This example has no enforcing hook.
 - Register each behavior guard in `package.json` with a command name beginning with `test:`, such as `test:subtract`.
 - Commit one logical change at a time. Use a separate branch for implementation.
 - Record defects in PROGRESS/TECHNICAL_DEBT.md and decisions in DECISIONS.md.

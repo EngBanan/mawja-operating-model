@@ -77,6 +77,10 @@ The language directories are project templates. The creator combines the selecte
 
 The `tests/` directories inside these examples test calculator behavior. The [top-level test suite](../tests/README.md) checks the toolkit itself.
 
+## Optional check-result reuse
+
+Each generated project also includes a calculator check with explicit case results and reuse disabled by default. Follow the [check-result reuse exercise](../scripts/CHECK_REUSE.md#try-the-calculator-example) after saving the initial project. It demonstrates fresh execution, verified reuse and rejection after a fault.
+
 ## Next steps
 
 Follow the [TypeScript/JavaScript walkthrough](../docs/tutorials/typescript-javascript.md#save-the-initial-project) or [Python walkthrough](../docs/tutorials/python.md#save-the-initial-project) to commit the project, connect a local remote, prepare a task and verify a change. Use [integration validation](../scripts/VALIDATION.md) when checking a customized setup.

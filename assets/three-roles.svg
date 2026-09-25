@@ -73,7 +73,7 @@
   <text class="foot" x="620" y="300" text-anchor="middle">decisions · open questions · work requiring Owner approval</text>
 
   <line class="rule" x1="36" y1="344" x2="1204" y2="344" stroke-width="1"/>
-  <text class="foot" x="36" y="370">Implementation and review use separate conversations.</text>
+  <text class="foot" x="36" y="370">Helpers follow the task's allowlist and restrictions.</text>
   <text class="foot" x="1204" y="370" text-anchor="end">Independent review before merge.</text>
 
   <defs>

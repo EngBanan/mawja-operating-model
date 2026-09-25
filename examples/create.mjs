@@ -83,6 +83,7 @@ try {
     }
     tools.set(name + '.ts', text);
   }
+  tools.set('run-checks.mjs', readFileSync(join(source, 'scripts', 'run-checks.mjs'), 'utf8'));
   if (language === 'python') {
     tools.set('check-python-baseline.py', readFileSync(join(source, 'scripts', 'check-python-baseline.py'), 'utf8'));
   }

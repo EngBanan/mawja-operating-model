@@ -124,6 +124,7 @@ Passing checks establish only the behavior they cover. [Verification](docs/09-th
 | `types:check` | Enforce configured crash diagnostics, per-file budgets and the total ceiling |
 | `lint:debt-ledger:strict` | Validate debt identifiers and closure markers |
 | `gates:count` | Count registered guard commands |
+| `checks:run` | Run explicit local checks with [optional verified-result reuse](scripts/CHECK_REUSE.md) |
 
 The examples register these commands. The [toolkit guide](scripts/README.md) explains installation, configuration and updates. Tools run inside each adopting repository; source updates are applied explicitly to project copies.
 

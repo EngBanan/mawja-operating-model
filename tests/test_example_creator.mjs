@@ -32,6 +32,8 @@ for (const language of ['typescript', 'javascript', 'python']) {
     const extension = { typescript: 'ts', javascript: 'js', python: 'py' }[language];
     assert.ok(existsSync(join(destination, 'app', `calc.${extension}`)));
     assert.ok(existsSync(join(destination, 'scripts', 'conductor', 'wave-prompt.ts')));
+    assert.ok(existsSync(join(destination, 'scripts', 'conductor', 'run-checks.mjs')));
+    assert.equal(JSON.parse(readFileSync(join(destination, 'scripts', 'checks', 'checks.json'), 'utf8')).allowReuse, false);
     if (language === 'python') assert.ok(existsSync(join(destination, 'scripts', 'conductor', 'check-python-baseline.py')));
   });
 }

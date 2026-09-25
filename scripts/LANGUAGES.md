@@ -24,6 +24,8 @@ The documented checks are verified on Linux/WSL2 with Node.js 20.19.5, npm 10.8.
 
 Prompt configuration and example-creator tests are also verified on native Windows with Node.js 22.16.0, npm 10.9.2 and Git 2.52.0.windows.1. This includes Git CRLF conversion and configuration paths containing spaces. The file-symlink regression runs on Linux and is skipped on Windows. Python execution remains verified on Linux/WSL2.
 
+The optional [check runner](CHECK_REUSE.md) uses Node.js without tsx for its own code. Its calculator checks exercise TypeScript, JavaScript and Python. Native Windows validation covers the runner and example creator; POSIX signal handling and file-symlink cases are validated on Linux. Review the eligibility requirements before enabling reuse in another environment.
+
 The JavaScript example covers `.js` files with ECMAScript modules. JSX, `.mjs`/`.cjs`, project references and monorepo configurations need additional configuration and verification.
 
 The Python example covers `.py` files in app, scripts/governance and tests, with one explicit mypy.ini. Custom mypy plugins, extra stub packages and other source layouts need integration checks. Activate the project's virtual environment before running its npm commands.

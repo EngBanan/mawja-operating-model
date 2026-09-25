@@ -17,7 +17,8 @@
     "wave:verify": "node --import tsx scripts/conductor/verify-wave.ts",
     "wave:number": "node --import tsx scripts/conductor/wave-prompt.ts --next-number",
     "lint:debt-ledger:strict": "node --import tsx scripts/conductor/check-debt-ledger.ts --strict",
-    "gates:count": "node --import tsx scripts/conductor/count-gates.ts"
+    "gates:count": "node --import tsx scripts/conductor/count-gates.ts",
+    "checks:run": "node scripts/conductor/run-checks.mjs scripts/checks/checks.json"
   },
   "devDependencies": {
     "tsx": "4.21.0"

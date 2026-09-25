@@ -29,8 +29,8 @@
   <!-- ① -->
   <rect class="card" x="36" y="76" width="250" height="78" rx="10" stroke-width="1.5"/>
   <text class="n" x="56" y="100">①</text>
-  <text class="t" x="80" y="100">Run the wave's guards</text>
-  <text class="s" x="56" y="124">Run the checks in</text>
+  <text class="t" x="80" y="100">Run affected guards</text>
+  <text class="s" x="56" y="124">Task-specific checks in</text>
   <text class="s" x="56" y="142">the review environment.</text>
 
   <line class="arrow" x1="161" y1="154" x2="161" y2="176" stroke-width="1.5" marker-end="url(#c)"/>
@@ -92,7 +92,7 @@
   <path class="greenline" d="M 400 218 L 470 218 L 470 112 L 506 112" fill="none" stroke-width="2" marker-end="url(#cg)"/>
 
   <line class="rule" x1="36" y1="424" x2="1204" y2="424" stroke-width="1"/>
-  <text class="f" x="36" y="448">Record the independent fault, intended failure and successful restoration.</text>
+  <text class="f" x="36" y="448">Select faults for new, changed or affected guards.</text>
   <text class="f" x="1204" y="448" text-anchor="end">Complete all five review steps.</text>
 
   <defs>

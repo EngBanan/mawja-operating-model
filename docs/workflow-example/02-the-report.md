@@ -13,6 +13,10 @@ An example Executor report for the [fictional notes app](README.md). The reviewe
               rename on the supported local filesystem.
    Measurements changed since task preparation: live gates 3 → 4;
               open debt 2 → 1; next free number remains #9.
+   Verification: targeted checks ran during implementation; the local hook ran
+              the complete required suites on b71e04d. Command output and the
+              environment record accompany the report. No helpers were used;
+              no UI or print layout was affected.
    Guard + mutation: replaced rename with a direct write; the guard failed to
               parse the file in 3 of 50 kills. Restored; the guard passed.
    What I could not measure: power loss and filesystems without atomic rename,
