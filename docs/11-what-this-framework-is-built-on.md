@@ -15,7 +15,7 @@ The minimum scan count prevents an empty scan from passing. It does not perform 
 
 ## Mawja-specific requirements
 
-Mawja requires a separate implementation conversation, a reviewer-selected mutation, explicit debt closure conditions and a report field for unmeasured behavior.
+Mawja requires a separate implementation conversation, independent review, explicit debt closure conditions and a report field for unmeasured behavior. Code review includes a reviewer-selected mutation; documentation-only review checks content and consistency. See the [verification protocol](09-the-verification-protocol.md) for the applicable checks.
 
 See [references](references.md) for related workflows and the engineering practices used here.
 

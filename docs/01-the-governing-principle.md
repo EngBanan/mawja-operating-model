@@ -5,8 +5,10 @@ Accept a change based on observed behavior and independent verification. A passi
 ## What this means in practice
 
 1. **Measure the current state.** Run the relevant command and record its inputs, output and environment. Treat older reports as historical evidence.
-2. **Verify the implementation branch.** The Executor's report guides review; the Conductor checks its claims against the code and observed behavior.
-3. **Test the guards.** Introduce a relevant fault, confirm that the intended check fails, restore the change and confirm that it passes again.
+2. **Verify the implementation branch.** The Executor's report guides review; the Conductor checks its claims against the requirements, changed content and observed behavior.
+3. **Test new, changed or affected guards.** Introduce a relevant fault, confirm that the intended check fails, restore the change and confirm that it passes again.
+
+Documentation-only work uses documentation and consistency checks. Code-branch and main-integration checks follow the [verification schedule](09-the-verification-protocol.md#schedule-checks). Independent review remains required for both.
 
 ## Working with a small team
 

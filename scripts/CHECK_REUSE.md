@@ -134,6 +134,8 @@ A lock prevents two runner attempts from overlapping. If the process is forcibly
 
 Add the runner as a blocking step in the existing hook after its prerequisites. Preserve all other required stages and their exit status. The runner does not install a hook, manage SSH connections or replace branch verification. Keep reuse off while validating the integration, then complete an isolated enabled attempt, including a failed required stage and recovery. Follow the [governance requirements](../AGENT_GOVERNANCE_KIT.md#optional-hook-result-reuse).
 
+The [verification schedule](../docs/09-the-verification-protocol.md#schedule-checks) determines which checks are required at each stage. This runner does not select documentation-only, branch or `main` routes. Result reuse and stage selection are separate capabilities. If a project hook does not support the required routing, maintain its existing checks and record a maintenance task; this guide does not authorize a bypass.
+
 For the implementation checks and platform scope, see [toolkit tests](../tests/README.md#optional-check-runner) and [compatibility](LANGUAGES.md#compatibility).
 
 ## Design references

@@ -23,7 +23,7 @@
   </style>
   <rect class="bg" width="1240" height="470"/>
 
-  <text class="h" x="36" y="38">INDEPENDENT REVIEW BEFORE MERGE</text>
+  <text class="h" x="36" y="38">INDEPENDENT CODE REVIEW BEFORE MERGE</text>
   <line class="rule" x1="36" y1="52" x2="1204" y2="52" stroke-width="1"/>
 
   <!-- ① -->
@@ -84,10 +84,11 @@
   <line class="arrow" x1="842" y1="307" x2="890" y2="307" stroke-width="1.5" marker-end="url(#c)"/>
 
   <!-- merge -->
-  <rect class="good" x="900" y="266" width="304" height="82" rx="10" stroke-width="2"/>
-  <text class="t gt" x="924" y="298">Merge</text>
-  <text class="s" x="924" y="322">Wave log · recorded decision</text>
-  <text class="s" x="924" y="338">· debt rows closed</text>
+  <rect class="good" x="900" y="252" width="304" height="116" rx="10" stroke-width="2"/>
+  <text class="t gt" x="924" y="280">Merge reviewed code</text>
+  <text class="s" x="924" y="304">Full checks on integrated main</text>
+  <text class="s" x="924" y="324">before publication.</text>
+  <text class="s" x="924" y="350">Record results and decisions.</text>
 
   <path class="greenline" d="M 400 218 L 470 218 L 470 112 L 506 112" fill="none" stroke-width="2" marker-end="url(#cg)"/>
 

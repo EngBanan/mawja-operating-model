@@ -14,9 +14,12 @@ An example Executor report for the [fictional notes app](README.md). The reviewe
    Measurements changed since task preparation: live gates 3 → 4;
               open debt 2 → 1; next free number remains #9.
    Verification: targeted checks ran during implementation; the local hook ran
-              the complete required suites on b71e04d. Command output and the
-              environment record accompany the report. No helpers were used;
-              no UI or print layout was affected.
+              critical type/debt checks and the three store/shape/atomic-save
+              checks on b71e04d. No additional full branch suite was required.
+              Full checks on the integrated main revision remain pending.
+              Hook routing is implemented in this fictional app; it is not
+              supplied by Mawja. Output and environment evidence accompany
+              the report. No helpers, UI changes or print layouts were involved.
    Guard + mutation: replaced rename with a direct write; the guard failed to
               parse the file in 3 of 50 kills. Restored; the guard passed.
    What I could not measure: power loss and filesystems without atomic rename,

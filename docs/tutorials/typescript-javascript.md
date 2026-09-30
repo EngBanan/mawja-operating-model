@@ -46,10 +46,11 @@ Open `WAVE_PROMPT_SUBTRACT.md` and complete every placeholder:
 | Batch | Calculator function, subtraction guard, test and command registration |
 | Debt | Item #1; leave it open until independent review confirms closure |
 | Constraints | English documentation; no external services, database or billing |
-| Verification plan | Targeted checks during implementation; complete `npm run check` on the final commit because this example has no enforcing hook; branch verification and the reviewer's independent checks |
+| Verification plan | On the branch: type and debt checks, addition regression tests, subtraction checks and required mutations; Conductor review remains independent. No extra full suite for sensitivity. At code integration into main: full `npm run check` on the integrated revision before publication; this tutorial stops before merge |
+| Hook support | No hook is installed. Run required checks explicitly; automatic stage routing would need a separate, validated integration |
 | Helpers | None; the Executor implements the calculator, guard and tests |
 | Visual evidence | Not applicable: this task has no UI or print layout |
-| Exit checks | Type checking, all tests, deliberate fault and restoration |
+| Exit checks | Critical type and debt checks, affected addition and subtraction tests, deliberate fault and restoration |
 | Branch and sensitivity | `wave/subtract`; low sensitivity |
 | Measurements | Preserve the generated table and commands |
 
@@ -146,6 +147,8 @@ git commit -m "Add calculator subtraction"
 npm run check
 ```
 
+The calculator is small: every check in `npm run check` is either a critical type/debt check or a test of the affected calculator behavior. Here the branch check set and the full project set coincide; this is not an additional full run. Larger projects should name their actual critical and change-specific commands.
+
 ## Verify the result
 
 Record the commands, exit status and output as [test evidence](../00-terms.md#test-evidence). Distinguish the cases that passed from behavior you did not test.
@@ -160,7 +163,7 @@ The verifier should pass and Git should print no changes. It discovers the newly
 
 Exercise the [deliberate faults and restoration checks](../../scripts/VALIDATION.md) on this disposable example. A reviewer then follows the [independent verification procedure](../09-the-verification-protocol.md), including a different mutation and their own check of the central claim.
 
-This walkthrough ends before merge. For a real task, return the implementation report and evidence to the reviewer. The Owner controls release.
+This walkthrough ends before merge. Return the implementation report and evidence for independent review. If the code is later integrated into `main`, run the full `npm run check` on that integrated revision before publication. The Owner controls release. See the [verification schedule](../09-the-verification-protocol.md#schedule-checks).
 
 ---
 

@@ -106,11 +106,13 @@ The **Owner** sets priorities and approves release. The **Executor** implements 
 
 A [**wave**](docs/00-terms.md#wave) is one bounded task. It begins with current measurements and ends with a verified result and recorded limitations.
 
-<img src="assets/wave-cycle.svg" alt="The wave cycle: prepare, build, verify, merge" width="100%">
+<img src="assets/wave-cycle.svg" alt="The code wave cycle: prepare, build, verify, merge and run full main checks before publication" width="100%">
 
-Implementation checks and independent review are separate steps. The reviewer runs the checks on the branch, introduces a different deliberate fault, verifies the task's central claim and confirms restoration.
+Documentation-only work needs documentation and consistency checks. Code branches need critical checks, tests for the change and required mutations. Code integration into `main` requires the full suite before publication. Follow the [verification schedule](docs/09-the-verification-protocol.md#schedule-checks); adopting these rules does not automatically update a project's hook.
 
-<img src="assets/verification.svg" alt="The verification protocol: five steps, and the fork at step two" width="100%">
+Independent review remains required. For code, the reviewer runs task-specific checks on the branch, introduces a different relevant fault, verifies the central claim and confirms restoration. For documentation, the reviewer checks content, links and consistency.
+
+<img src="assets/verification.svg" alt="Independent code verification: five review steps, then full checks on integrated main before publication" width="100%">
 
 Passing checks establish only the behavior they cover. [Verification](docs/09-the-verification-protocol.md) includes testing the checks themselves; [limitations](docs/12-transparency.md) describes what remains outside the workflow.
 

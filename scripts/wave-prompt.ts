@@ -343,7 +343,7 @@ ${forced}
 
 **Required project files:** ${FIXED_READS}.
 
-**Required code reading:** ⟪TODO: the code files by name⟫
+**Required code reading:** ⟪TODO: the code files by name, or Not applicable with a reason for documentation-only work⟫
 
 ---
 
@@ -391,7 +391,19 @@ ${measuredTable(m)}
 
 ⟪TODO: logical batches in order, with one commit per batch⟫
 
-**Verification plan:** ⟪TODO: targeted checks per batch; final required suites and who runs them; what the enforcing hook covers; affected guards and mutation cases; named visual evidence; the Conductor's independent checks⟫
+**Verification plan:** ⟪TODO: classify the actual change; name documentation-only checks or critical and change-specific branch checks; required mutations and visual evidence; full-suite command and responsible role for code integration into main; the Conductor's independent checks; give a concrete sensitivity reason for any extra full suite on the Executor branch, or state none⟫
+
+| Scope or stage | Required checks |
+|---|---|
+| Documentation only | Documentation checks and consistency review, including changed links, instructions and diagrams; also applies to a documentation-only merge |
+| Executor's code branch | The project's critical checks, tests for changed and affected behavior, and required targeted mutations |
+| Code integration into main | The full project suite on the exact integrated revision before publication or deployment; the Conductor confirms the evidence |
+
+Run targeted checks during each batch. An extra full suite on the Executor branch needs a concrete sensitivity reason naming the risk and why targeted checks are insufficient. A branch full run does not remove the full check at code integration into main. After a fix, rerun affected checks and dependencies; establish full-suite evidence for the corrected integrated revision before publication.
+
+**Hook support:** ⟪TODO: record the effective hook's actual routes, commands and evidence; name missing capabilities and their maintenance record, or state none; distinguish currently mandatory extra checks from sensitivity-driven checks⟫
+
+The schedule does not change installed enforcement. If the hook still requires the full suite on every branch, keep it until reviewed routing maintenance is complete. Run uncovered required checks explicitly. Do not disable or skip the hook to imitate a missing route. The supplied generator, prompt checker and branch verifier still run their configured type measurements, including for documentation tasks; the optional check runner does not select stages.
 
 **Helper assignments:** ⟪TODO: name each bounded helper task and its files, or state none; identify restricted parts, question routing and how you will review every changed line⟫
 
@@ -407,6 +419,8 @@ For background work, use completion notifications when supported, with a complet
 
 ## Step 6: Hard constraints (fixed)
 
+For documentation-only work that does not change executable behavior, record code-specific constraints, mutation gates and mutation report fields as Not applicable with a reason. Keep content, link and consistency checks, independent Conductor review, and measurements required by installed tools. Changes to executable examples, configuration or check behavior are not documentation-only.
+
 | | |
 |---|---|
 | **Language** | ⟪TODO: specify the language and tone for user-facing text and reports to the Owner⟫ |
@@ -414,11 +428,11 @@ For background work, use completion notifications when supported, with a complet
 | **Limits** | Every operational limit must be configurable at runtime. Do not hard-code it in the source. Name the gate that enforces it: ⟪TODO: your operational-limits gate⟫ |
 | **Isolation** | ⟪TODO: your data-access rule: which layer alone may reach the database, and what every function that reads a user's data takes as its first argument⟫ |
 | **Money** | ⟪TODO: your single conversion point from raw cost to a charged amount, and the one module a monetary constant may live in⟫ |
-| **The guard** | Prove new, modified or affected guards with targeted mutations, including effects through runners, configuration, discovery, fixtures, dependencies or protected code. Confirm the intended assertion fails and then passes after restoration. Include missing behavior and incorrect values where relevant, as specified in Section 9. Do not replay every historical mutation automatically; preserve the Conductor's different mutation. |
-| **Checks** | Run targeted checks during work and complete required suites on the final commit using existing acceptance criteria. If the enforcing hook runs those suites, do not duplicate its successful run manually. Run missing suites explicitly. Run the verifier once per unchanged verification stage; fixes, changed inputs, incomplete evidence or a specific review concern require affected checks again. |
+| **The guard** | Prove new, modified or affected guards with targeted mutations, including effects through runners, configuration, discovery, fixtures, dependencies or protected code. Confirm the intended assertion fails and then passes after restoration. Include missing behavior and incorrect values where relevant, as specified in Section 9. Do not replay every historical mutation automatically; preserve the Conductor's different mutation for code review. For documentation-only work, record Not applicable and the reason. |
+| **Checks** | Follow the Step 5 schedule: documentation and consistency checks for documentation-only work; critical checks, change-specific tests and required mutations on the Executor branch; the full suite at code integration into main before publication. Extra branch full runs need a concrete sensitivity reason, unless current enforcement still requires them pending maintenance. Do not duplicate an identical successful hook run manually. Run the verifier once per unchanged verification stage. Fixes, changed inputs, incomplete evidence or a specific review concern require affected checks and dependencies again. Keep existing acceptance criteria. |
 | **Evidence** | Record each result's command, commit, tree, environment, inputs, scope, acceptance criteria and complete output. Reuse between hook attempts requires a reviewed integration that verifies eligibility and inputs. The optional run-checks.mjs tool is disabled by default; copying it does not establish eligibility. An older success cannot override a later failed or unfinished check, even if reuse was disabled then. Keep gates blocking and never bypass them with git push --no-verify. |
 | **Visual evidence** | Capture named affected surfaces, including shared-component effects. Add newly discovered impacts with a reason. Do not claim the hook covers unmeasured behavior. |
-| **\`${TYPE_LABEL}\`** | Does not exceed **${m.tscCount}** · and the crash class is **zero** |
+| **\`${TYPE_LABEL}\`** | For code and any type measurement required by installed tools: does not exceed **${m.tscCount}** · and the crash class is **zero** |
 | **The tree** | Clean at handover. ⛔ No leftover temporary scripts |
 | **Pushing** | Confirm required hook services are available. After a failure, collect independently measurable blockers before retrying; do not run stages with failed prerequisites. An out-of-memory event or timeout alone does not prove an environmental cause. Follow the hook's implemented behavior and keep governance gates blocking. |
 
@@ -428,30 +442,31 @@ For background work, use completion notifications when supported, with a complet
 
 | # | Item | ✅ |
 |---|---|---|
-| 1 | \`${TYPE_LABEL}\` ≤ **${m.tscCount}** and the crash class is zero | ☐ |
-| 2 | Keep the **${m.gates}** inherited gates, run new, changed and affected checks, and report the final gate count | ☐ |
+| 1 | Any required type measurement: \`${TYPE_LABEL}\` ≤ **${m.tscCount}** and the crash class is zero; retain measurements required by installed tools | ☐ |
+| 2 | Keep the **${m.gates}** inherited gates, run the checks applicable to this change and stage, and report the final gate count | ☐ |
 | 3 | No regressions in existing behavior | ☐ |
 | 4 | Incremental commits: one per batch | ☐ |
 | 5 | The tree is clean and the branch is pushed | ☐ |
-| 6 | Required suites meet the acceptance criteria on the final commit; evidence and reasons for any reruns are recorded | ☐ |
-| 7 | New, modified or affected guards have targeted mutation evidence and pass after restoration | ☐ |
+| 6 | Documentation-only or code-branch checks meet the criteria on the final Executor commit; record evidence, any extra full-run reason, hook limitations and required reruns. For code, the main full-suite obligation is assigned, not claimed completed here; for documentation-only work, record it as not applicable | ☐ |
+| 7 | New, modified or affected guards have targeted mutation evidence and pass after restoration; for documentation-only work, record Not applicable and the reason | ☐ |
 | 8 | Named visual evidence is complete, with newly identified impacts and unmeasured behavior reported | ☐ |
 | 9 | Helper work follows the allowlist and restrictions; every changed line was reviewed and decisions recorded | ☐ |
-| ⟪…⟫ | ⟪TODO: this wave's specific gates, the behavior each guard checks, and the deliberate fault it must detect⟫ | ☐ |
+| ⟪…⟫ | ⟪TODO: this wave's specific checks; for code guards, name the behavior and deliberate fault; for documentation-only work, name content and consistency checks and state why mutations do not apply⟫ | ☐ |
 
 ---
 
 ## Step 8: Closing and handover
 
 1. **The branch** \`⟪TODO: the branch name⟫\`: a commit per batch, then push it.
-2. The Conductor merges to \`main\` and writes \`${DECISION_LOG}\` at merge time. Include proposed decisions in your report.
+2. The Conductor reviews independently, merges to \`main\` and writes \`${DECISION_LOG}\` at merge time. Code integration requires the full suite on the integrated revision before publication. A failed check blocks publication; the Executor does not merge. Include proposed decisions in your report.
 3. **Debt rows**: mark what was actually delivered closed with evidence; the Conductor checks and confirms closure at merge. Record new debt **starting at #${m.nextNumber}**. Deliberate deferrals go in their own file with a trigger.
 4. **A structured final report** covering:
    - every number in Step 2 you re-measured: **matched / differed (with the new value)**
    - what was delivered · and what was not and why
    - new, modified or affected guards, why each was selected, the fault detected and the passing result after restoration
    - for existing guards considered in this task, what changed or why no repeated mutation was needed; group guards with the same reason
-   - check commands, commit, environment, scope, complete output and reasons for any necessary reruns
+   - check commands, commit, environment, scope, stage, complete output and reasons for extra full runs or necessary reruns
+   - actual hook support, missing capabilities and maintenance records; the remaining full-suite step for code integration into main
    - named visual evidence and limits; helper assignments, decisions and your review of their changes
    - **what I could not measure and why** (required)
    - the cost of any AI call as a number · and the branch name and commit hash
@@ -470,7 +485,7 @@ For background work, use completion notifications when supported, with a complet
    Report and evidence: <path or link to the complete Step 8 report and supporting output>
    Delivered: <a two-item summary>
    Measurements changed since task preparation: <the list or "none">
-   Guard + mutation: <protected behavior · fault introduced · failure and restoration results>
+   Guard + mutation: <protected behavior · fault introduced · failure and restoration results; or Not applicable with the reason for documentation-only work>
    What I could not measure: <the list>
    AI call cost: <the number> <the currency>
    ⇒ For the owner: <one line in simple language; for medium sensitivity, include your recommendation on when to ship>

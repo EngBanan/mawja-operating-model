@@ -110,7 +110,9 @@ git switch wave/my-change
 npm run wave:verify -- --base=main --branch=wave/my-change --claim="npm test"
 ```
 
-The verifier checks Git state, type budgets, newly registered or changed guard commands, and the supplied claim command. Include affected inherited checks in the verification plan even when their commands are unchanged. Use the enforcing runner for full suites and retain the Conductor's task-specific checks; see the [verification schedule](../docs/09-the-verification-protocol.md#schedule-checks). Complete the independent verification procedure before accepting the change. For an eligible local check, the optional [check runner](CHECK_REUSE.md) can reuse a verified result after adoption review. It is disabled by default and does not replace this independent review.
+The verifier checks Git state, type budgets, newly registered or changed guard commands, and the supplied claim command. Include affected inherited checks in the verification plan even when their commands are unchanged. Use critical and change-specific checks on the Executor branch, with required mutations; run the full suite at code integration into `main` before publication. An extra full suite on the branch requires a concrete sensitivity reason. Documentation-only work uses documentation and consistency checks. Retain the Conductor's independent review; see the [verification schedule](../docs/09-the-verification-protocol.md#schedule-checks). Complete the independent verification procedure before accepting the change. For an eligible local check, the optional [check runner](CHECK_REUSE.md) can reuse a verified result after adoption review. It is disabled by default and does not replace this independent review.
+
+Choose `--claim` for the task's actual behavior; `npm test` is appropriate only when its scope matches the required checks. The supplied tools still run configured type measurements and do not route hooks by stage. Record current hook behavior and missing routing as maintenance; do not bypass existing gates to apply the schedule. See [policy and hook support](../docs/09-the-verification-protocol.md#policy-and-hook-support).
 
 ## Update project copies
 

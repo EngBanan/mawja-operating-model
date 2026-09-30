@@ -1,6 +1,6 @@
 # 13 · Adoption checklist
 
-Inspect the repository's files and run its configured checks before marking items complete. Use this checklist when adopting Mawja or reviewing an existing setup.
+Inspect the repository's files and run its configured checks before marking items complete. Use this checklist when adopting Mawja or reviewing an existing setup. Apply task-specific items to the actual scope; for documentation-only work, record why code checks and mutations do not apply. Independent content and consistency review remains required, along with measurements required by installed tools.
 
 - [ ] The Conductor reviews independently and writes no production code.
 - [ ] The task prompt contains the decisions, scope and constraints needed by a fresh conversation.
@@ -8,9 +8,11 @@ Inspect the repository's files and run its configured checks before marking item
 - [ ] The prompt identifies existing behavior that must be preserved.
 - [ ] The task states when to report completion and when to stop for an Owner decision.
 - [ ] The Conductor verifies the implementation branch and its behavior.
-- [ ] The reviewer's mutation differs from the Executor's cases.
+- [ ] For code review, the reviewer's mutation differs from the Executor's cases.
 - [ ] Mutations test incorrect values as well as absence where relevant.
-- [ ] The verification plan names targeted checks, final suites and their runner, with reasons for necessary reruns.
+- [ ] The verification plan names the applicable checks: documentation and consistency for documentation-only work; critical and change-specific checks with required mutations for code branches; the full suite at code integration into `main` before publication.
+- [ ] Any additional full suite on the Executor branch has a concrete sensitivity reason; reruns after fixes and changed inputs remain required.
+- [ ] The plan distinguishes current hook behavior from the written policy, records missing capabilities as maintenance and retains enforced checks without bypasses.
 - [ ] Mutation selection covers new, modified and affected guards; repeats name the affected behavior, and unchanged guards considered in the task have a reason for no repeat.
 - [ ] Visual evidence covers named affected surfaces, including shared-component effects; unmeasured behavior is declared.
 - [ ] Helper tasks follow the closed allowlist, restrictions take precedence, and the Executor reviews every changed line.

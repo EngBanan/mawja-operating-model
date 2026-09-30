@@ -15,7 +15,7 @@ src/store.ts
 
 ## What the tool did
 
-The Conductor inspects the final hook evidence for the reported commit, then checks out the wave's branch and runs the task-specific store and shape tests in the reviewer's environment as part of step ①. This does not replay the complete hook suite. These regression checks are separate from the independent command for step ④.
+The Conductor inspects the branch hook evidence for critical and change-specific checks on the reported commit, then checks out the branch and runs the task-specific store and shape tests in the reviewer's environment as part of step ①. This independent review does not add a full branch suite. These regression checks are separate from the independent command for step ④.
 
 ```
 $ git switch wave/w3-atomic-save
@@ -112,7 +112,7 @@ The probe first proves a successful save, rejects CLI failures, and checks the c
 | ④ claim | the CLI probe checked readability on a local disk, within the stated limits |
 | ⑤ tree | clean after automatic commands and after restoring the mutation |
 
-The Conductor confirms the evidence for debt #7, merges, writes the wave log, and records decision #10. Network-filesystem support is a deliberate deferral F3 in `PROGRESS/FUTURE_ENHANCEMENTS.md`, with the trigger "first user requiring a network filesystem"; power-loss durability remains explicitly outside the promise. The wave is medium sensitivity. The report recommends "ship after the next backup"; the Owner decides when it ships.
+The Conductor confirms the evidence for debt #7, merges, writes the wave log, and records decision #10. Before publishing the integrated revision, the project hook runs full `npm run check`; the Conductor checks its result and retains the complete output. A failure blocks publication and requires correction and new applicable evidence. Network-filesystem support is a deliberate deferral F3 in `PROGRESS/FUTURE_ENHANCEMENTS.md`, with the trigger "first user requiring a network filesystem"; power-loss durability remains explicitly outside the promise. The wave is medium sensitivity. The report recommends "ship after the next backup"; the Owner decides when it ships.
 
 ---
 

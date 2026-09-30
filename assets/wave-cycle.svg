@@ -25,7 +25,7 @@
   </style>
   <rect class="bg" width="1240" height="470"/>
 
-  <text class="hdr" x="36"  y="38">PREPARE</text>
+  <text class="hdr" x="36"  y="38">CODE WAVE · PREPARE</text>
   <text class="hdr" x="318" y="38">BUILD</text>
   <text class="hdr" x="538" y="38">VERIFY</text>
   <text class="hdr" x="1004" y="38">MERGE</text>
@@ -55,8 +55,8 @@
   <rect class="card" x="314" y="192" width="188" height="88" rx="10" stroke-width="1.5"/>
   <text class="num" x="332" y="216">03</text>
   <text class="ttl" x="332" y="238">Implement</text>
-  <text class="sub" x="332" y="256">Implement and run</text>
-  <text class="sub" x="332" y="274">targeted checks.</text>
+  <text class="sub" x="332" y="256">Critical checks</text>
+  <text class="sub" x="332" y="274">Change tests · mutations</text>
 
   <line class="arrow" x1="502" y1="140" x2="544" y2="140" stroke-width="1.5" marker-end="url(#a)"/>
   <path class="arrow" d="M 408 192 L 408 160 L 502 160 L 502 140" fill="none" stroke-width="1.5"/>
@@ -98,21 +98,23 @@
   <text class="sub" x="1006" y="376">before merging.</text>
 
   <!-- 07 -->
-  <rect class="card" x="992" y="78" width="212" height="120" rx="10" stroke-width="1.5"/>
+  <rect class="card" x="992" y="78" width="212" height="158" rx="10" stroke-width="1.5"/>
   <text class="num" x="1006" y="102">07</text>
   <text class="ttl" x="1006" y="124">Merge and document</text>
   <text class="sub" x="1006" y="148">Wave log · recorded decision</text>
   <text class="sub" x="1006" y="166">· findings · closure evidence</text>
-  <text class="sub" x="1006" y="186">Owner decides when to ship</text>
+  <text class="sub" x="1006" y="188">Full checks on merged main</text>
+  <text class="sub" x="1006" y="206">before publication.</text>
+  <text class="sub" x="1006" y="226">Owner decides when to ship</text>
 
-  <path class="arrow" d="M 1093 290 L 1093 208" fill="none" stroke-width="1.5" marker-end="url(#a)"/>
-  <text class="foot" x="1101" y="252" style="font-size:12px">high → Owner review</text>
+  <path class="arrow" d="M 1093 290 L 1093 246" fill="none" stroke-width="1.5" marker-end="url(#a)"/>
+  <text class="foot" x="1101" y="264" style="font-size:12px">high → Owner review</text>
   <path class="arrow" d="M 934 322 L 962 322 L 962 262 M 962 228 L 962 152 L 986 152" fill="none" stroke-width="1.5" marker-end="url(#a)"/>
   <text class="foot" x="962" y="238" style="font-size:11.5px" text-anchor="middle">medium</text><text class="foot" x="962" y="253" style="font-size:11.5px" text-anchor="middle">or low</text>
 
   <line class="rule" x1="36" y1="420" x2="1204" y2="420" stroke-width="1"/>
-  <text class="foot" x="36" y="444">One wave · bounded scope · one branch · one exit gate</text>
-  <text class="foot" x="1204" y="444" text-anchor="end">Medium: recommend release · Low: Conductor review</text>
+  <text class="foot" x="36" y="444">Documentation only: documentation and consistency checks.</text>
+  <text class="foot" x="1204" y="444" text-anchor="end">Code: full main checks before publication.</text>
 
   <defs>
     <marker id="a" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

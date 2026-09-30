@@ -32,7 +32,9 @@ If an implementation conversation is lost, preserve the branch commits and check
 
 ## Check routing
 
-Route checks according to the affected paths and their dependencies. Keep required gates blocking. Avoid global skip switches that bypass relevant checks, and distinguish intentional routing from environment failure.
+Follow the [verification schedule](09-the-verification-protocol.md#schedule-checks): documentation and consistency checks for documentation-only work; critical checks, change-specific tests and required mutations on the Executor branch; the full suite at code integration into `main` before publication. Select checks by behavior and dependencies, not only file extensions.
+
+A written routing rule does not implement it. The supplied toolkit does not select hook stages. Record missing project-hook capabilities as maintenance and retain currently enforced checks until reviewed maintenance is complete. Avoid global skip switches that bypass relevant checks, and distinguish intentional routing from environment failure.
 
 ---
 

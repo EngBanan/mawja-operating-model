@@ -28,7 +28,15 @@ The Executor resolves routine implementation choices within the authorized scope
 
 ## Verification and helper assignments
 
-State which checks run during implementation, which complete suites run on the final commit, what the enforcing hook covers, and what the Conductor checks independently. Name affected guards and visual surfaces, including indirect effects from shared code or styles. Follow [the verification protocol](09-the-verification-protocol.md#schedule-checks).
+Specify the checks in this order:
+
+1. Documentation-only work: documentation checks and consistency review.
+2. Executor's code branch: critical checks, tests for changed and affected behavior, and required mutations.
+3. Code integration into `main`: the full suite on the integrated revision before publication.
+
+Name the commands, responsible role and evidence for each applicable stage, plus the Conductor's independent checks. Record a concrete sensitivity reason for any additional full suite on the Executor branch. Rerun affected checks after fixes; a previous pass does not cover changed inputs. Include affected guards and visual surfaces, including indirect effects from shared code or styles. Follow [the verification protocol](09-the-verification-protocol.md#schedule-checks).
+
+State what the enforcing hook actually supports and which capabilities still need maintenance. An existing hook may require more checks than the schedule; keep those checks until reviewed maintenance is complete. Missing routing never authorizes a bypass. The supplied tools still perform their configured type measurements and do not select hook stages; see [policy and hook support](09-the-verification-protocol.md#policy-and-hook-support).
 
 List helper tasks explicitly, or state that none are planned. Apply the [closed allowlist and restrictions](03-why-a-separate-conversation.md#helper-implementation); include how questions reach the Executor and how the Executor reviews the result.
 

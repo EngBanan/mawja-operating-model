@@ -15,9 +15,11 @@ The supplied type checkers and guard counter implement the [measurement contract
 
 ## Automation and review
 
-The verifier requests mutation evidence but does not perform the reviewer's independent mutation. Select fault cases for new, modified or affected guards; do not replay an entire historical matrix automatically. The reviewer also chooses a different fault, as required by [Section 9](09-the-verification-protocol.md#select-mutation-evidence).
+For code review, the verifier requests mutation evidence but does not perform the reviewer's independent mutation. Select fault cases for new, modified or affected guards; do not replay an entire historical matrix automatically. The reviewer also chooses a different fault, as required by [Section 9](09-the-verification-protocol.md#select-mutation-evidence).
 
-A claim command can include a guard that the verifier also runs automatically. The supplied verifier does not deduplicate those commands; choose the claim for the behavior it must establish.
+A claim command can include a guard that the verifier also runs automatically. The supplied verifier does not deduplicate those commands; choose a task-specific claim command for the behavior it must establish.
+
+The [stage schedule](09-the-verification-protocol.md#schedule-checks) is a workflow rule. The supplied tools do not route hooks by documentation, code branch or `main`; their configured type measurements still run. The optional runner has no automatic stage selector. Inspect the adopting project's hook and record missing routing as maintenance, keeping its existing gates until that maintenance is validated. See [policy and hook support](09-the-verification-protocol.md#policy-and-hook-support).
 
 An automated pass covers the checks that ran. The reviewer remains responsible for the central claim, relevant inherited checks and any unmeasured behavior.
 

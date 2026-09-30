@@ -138,16 +138,24 @@ Set the package scripts, TYPES_CMD and GATES_CMD to the forms shown in [installa
 
 The [tsx Node entry point](https://github.com/privatenumber/tsx/blob/master/docs/dev-api/node-cli.md) avoids the CLI IPC endpoint, whose path is subject to [Node's platform limits](https://nodejs.org/download/release/v20.19.5/docs/api/net.html#identifying-paths-for-ipc-connections).
 
+## The hook still runs a full suite on the Executor branch
+
+The [verification schedule](../docs/09-the-verification-protocol.md#schedule-checks) does not install stage routing. Inspect the effective hook and the commands it calls. If lighter branch checks are not implemented, record the missing capability as maintenance and keep the current mandatory run. Do not use skip flags or disable the hook to match the written policy.
+
+The supplied `wave:new`, `wave:check` and `wave:verify` commands still require their configured type measurements, including for documentation tasks. They have no documentation-only switch. Any change to those requirements needs maintenance and validation; changing a prompt does not change execution.
+
 ## Automatic checks pass but review is incomplete
 
-Before accepting the change:
+The Conductor reviews the change independently. For documentation-only work, check the changed content, links, instructions, diagrams and consistency with the project rules. Record why code-specific checks and mutations do not apply. Retain measurements required by the installed tools.
+
+For code changes, before accepting the branch:
 
 1. Run the relevant existing guard commands, including commands unchanged by the task.
-2. Introduce a reviewer-selected fault, confirm the intended check fails, restore the source and rerun the check.
+2. Introduce a reviewer-selected fault for the affected behavior, confirm the intended check fails, restore the source and rerun the check.
 3. Verify the task's requested behavior with a separate command or observation.
 4. Confirm that the working tree is clean.
 
-See the [verification protocol](../docs/09-the-verification-protocol.md) for the evidence to record.
+Code integration into `main` still requires the full suite on the integrated revision before publication. See the [verification protocol](../docs/09-the-verification-protocol.md) for the evidence to record.
 
 ## Python or mypy is unavailable
 

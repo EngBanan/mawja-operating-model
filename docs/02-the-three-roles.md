@@ -14,7 +14,7 @@ The Conductor writes the task prompt. The Owner passes it to a fresh implementat
 
 The reviewer should assess the implementation against the requirements without depending on the author's reasoning. Keeping implementation in a separate conversation also limits the review context to the task, result and evidence.
 
-If review finds a defect, return it to the Executor for correction. The Conductor verifies the corrected branch before merging.
+If review finds a defect, return it to the Executor for correction. The Conductor verifies the corrected branch before merging. For code integration into `main`, the Conductor also confirms the full-suite evidence on the integrated revision before publication, following the [verification schedule](09-the-verification-protocol.md#schedule-checks).
 
 ## Review the delivery
 

@@ -1,6 +1,8 @@
 # 9 · The Verification Protocol
 
-The Conductor completes these steps before merging. The toolkit can automate checks, type measurement and Git-state inspection; independent mutations and judgment remain review responsibilities.
+The Conductor reviews every wave independently before merging. For code changes, complete the steps below. For documentation-only work, independently check the changed content, links, examples and consistency with the project rules; record why code-specific steps do not apply. An executable example, configuration change or altered check behavior is not documentation-only just because it appears in a documentation directory.
+
+The toolkit can automate checks, type measurement and Git-state inspection; independent mutations and judgment remain review responsibilities. Installed tools and hooks may still require additional checks; follow the [implementation boundary](#policy-and-hook-support).
 
 | Step | Required evidence |
 |---|---|
@@ -14,7 +16,19 @@ Run the existing checks for behavior the change could affect, even if their comm
 
 ## Schedule checks
 
-During implementation, run checks targeted at the behavior changed in each batch. Complete all required suites on the final commit using the project's existing acceptance criteria. If the enforcing hook runs those suites, its run is the final run; do not run an identical successful suite manually immediately before it. If it does not, run the missing suites explicitly. The hook still runs and remains blocking.
+Choose the check scope from the actual change and delivery stage. Record the exact commands, acceptance criteria, responsible role and evidence location in the task prompt.
+
+| Scope or stage | Required checks |
+|---|---|
+| Documentation only | Documentation checks and consistency review, including changed links, instructions and diagrams. This also applies to a documentation-only merge |
+| Executor's code branch | The project's critical checks, tests for changed and affected behavior, and required targeted mutations |
+| Code integration into `main` | The full project suite against the exact integrated revision, before publishing that revision or deploying it. The Conductor confirms the evidence |
+
+Run targeted checks during implementation. On the final Executor commit, complete the branch checks above. An additional full suite on that branch requires a recorded, concrete sensitivity reason: name the risk, the affected behavior and why targeted checks are insufficient. For example, a change to shared authorization or test-selection logic may require broader validation. The task's sensitivity label alone is not the reason. A branch full run does not remove the full check at code integration into `main`.
+
+The full suite uses the project's existing acceptance criteria; it is not a claim that every possible behavior is covered. A failed full check blocks publication. After a correction, rerun affected checks and dependencies and establish the required full-suite evidence for the corrected integrated revision. Owner approval to release does not replace these checks.
+
+Use the enforcing hook's actual commands and environment for the required stage. If it runs those checks, do not duplicate an identical successful run manually immediately before it. Run required checks that the hook does not cover explicitly. The hook still runs and remains blocking.
 
 A result applies to its commit, working tree, command, scope, acceptance criteria, tool versions, environment and relevant external state. Record these with the complete output. Do not repeat an accepted result with identical inputs without a reason. After a fix, changed input, missing evidence or a specific review concern, rerun the affected checks and their dependents. Record the reason; there is no fixed limit on necessary retries.
 
@@ -23,6 +37,16 @@ When existing acceptance criteria allow an error budget or a reviewed failure ba
 The Conductor inspects the suite evidence and still runs the task-specific checks in the table above. Reading the Executor's report alone is not independent verification. Different environments require their own evidence.
 
 When a hook fails, collect other independently measurable blockers and address them before retrying. Do not run a stage whose prerequisite failed. Follow the hook's implemented retry behavior; documentation or a saved log cannot authorize bypassing it. The optional [check runner](../scripts/CHECK_REUSE.md) provides a default-off reuse path for eligible local checks. Its [adoption requirements](../AGENT_GOVERNANCE_KIT.md#optional-hook-result-reuse) still apply; it does not make stateful checks eligible or replace the enforcing hook.
+
+## Policy and hook support
+
+The schedule above is a workflow requirement, not evidence that a project's hook implements stage selection. Inspect the effective hook, its called commands and recorded runs. State separately which routes are implemented, which checks currently run and which capabilities need maintenance.
+
+If the hook still runs the full suite on every branch, keep that behavior until a reviewed maintenance change implements the lighter branch route. Record the extra run as an existing enforcement requirement, not an invented sensitivity reason. Missing documentation routing or a full `main` check also requires maintenance; run uncovered required checks explicitly in the meantime. Do not skip stages, disable the hook or use `--no-verify` to imitate an unimplemented route.
+
+The supplied prompt generator records the plan but does not select hook stages. `wave:new` and `wave:check` still require their configured type measurement, including for documentation tasks. `wave:verify` also runs its configured type check and has no documentation-only mode. `run-checks.mjs` runs its configured checks; it does not choose documentation, branch or `main` routes or enforce a full suite at merge. Keep these checks when the installed tools require them. Any change to their enforcement needs separate maintenance and validation.
+
+Before adopting routing maintenance, prove that the intended documentation and code-branch paths run their required checks, code integration into `main` cannot select the lighter route, and a failed required check still blocks delivery. Until then, report the policy as adopted and the missing capability as pending.
 
 ## Select mutation evidence
 

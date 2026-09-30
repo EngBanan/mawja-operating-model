@@ -4,6 +4,8 @@ Use this procedure after configuring the toolkit for a project. Run deliberate f
 
 Keep production repositories and data outside these tests.
 
+This procedure validates the toolkit integration itself. The concrete sensitivity reason for its broad checks is that a broken measurement or verification tool can accept incorrect work across tasks; checking only an application feature would not detect that. Ordinary tasks follow the [documentation, branch and main schedule](../docs/09-the-verification-protocol.md#schedule-checks).
+
 ## Establish the passing state
 
 From the generated project on `wave/subtract`, run:

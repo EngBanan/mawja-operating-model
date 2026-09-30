@@ -16,7 +16,7 @@ Use [Start here](00-foreword.md) to choose a reading path, try an example or ado
 | [06 · File architecture](06-file-architecture.md) | Organize rules, decisions, evidence and progress |
 | [07 · Debt ledger](07-the-debt-ledger.md) | Priorities, closure evidence and identifiers |
 | [08 · Sensitivity](08-sensitivity-classification.md) | Review requirements by risk |
-| [09 · Verification](09-the-verification-protocol.md) | Checks, mutations and independent claims |
+| [09 · Verification](09-the-verification-protocol.md) | Checks by delivery stage, mutations and independent review |
 | [10 · Toolkit](10-the-toolkit.md) | Automation and its review boundaries |
 | [11 · Engineering foundations](11-what-this-framework-is-built-on.md) | Related practices and Mawja conventions |
 | [12 · Limitations](12-transparency.md) | Scope, costs and operational requirements |

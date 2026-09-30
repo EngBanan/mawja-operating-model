@@ -46,7 +46,15 @@ Your goal: a process crash or kill during save leaves a complete notes file on t
 2. `scripts/governance/check-save-atomic.ts`: kill the saving process during repeated writes and refuse any file that fails to parse. Register `test:save-atomic` in package.json. One commit.
 3. Mark existing debt #7 closed with evidence. Propose decision #10 in the report; do not write DECISIONS.md. One commit.
 
-Verification plan: run store and shape checks during the affected batches and prove the new atomic-save guard with a targeted mutation. The local hook runs the complete required suites on the final commit; do not duplicate that run manually. The Conductor runs task-specific checks, a different mutation and a separate CLI probe. Rerun affected checks after a fix or changed input.
+Verification plan:
+
+- Documentation-only work uses documentation and consistency checks; this wave changes code.
+- Executor branch: critical type/debt checks, `test:store`, `test:store-shape` and `test:save-atomic`, with a targeted mutation for the new guard. Run affected checks during batches and complete branch evidence on the final commit.
+- Code integration into main: the Conductor confirms full `npm run check` evidence for the integrated revision before publication. This is not part of the Executor's completed branch checks.
+- No additional full suite on the branch: the listed checks cover the affected storage and CLI behavior. Record a concrete sensitivity reason if broader coverage becomes necessary.
+- The Conductor runs task-specific checks, a different mutation and a separate CLI probe. Rerun affected checks and dependencies after a fix or changed input.
+
+Hook support: in this fictional app, a project-specific hook runs the branch checks above and the full suite for code integration into main. Mawja does not install that routing. In an adopting project, inspect actual hook behavior and record missing routes as maintenance; retain existing mandatory checks without bypasses until maintenance is complete.
 
 Helper assignments: none. The Executor implements the storage change and the guard. No UI or print layout is affected, so no screenshots are required. If that scope changes, update the plan before acceptance.
 

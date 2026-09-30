@@ -1,6 +1,6 @@
 # Multi-tool governance
 
-**Version 1.1** · An extension to Mawja for repositories using more than one agent tool.
+**Version 1.2** · An extension to Mawja for repositories using more than one agent tool.
 
 Reference this file from the repository's rules. If linking is impractical, keep one copy in the repository root. Maintain one authoritative source.
 
@@ -152,7 +152,9 @@ This kit has no gate that checks whether repository knowledge is complete, hando
 - If a guard's own compliance change invalidates its check, document the cycle in the affected item's record. Do not suppress it with an exception.
 - Preserve complete command output, including the failure cause.
 - Verify committed content rather than relying on the current working-tree copy.
-- Use the enforcing hook's actual commands and environment for final checks. If the hook runs the complete required suites, do not duplicate their successful run immediately before it; follow the [verification schedule](docs/09-the-verification-protocol.md#schedule-checks).
+- Follow the [verification schedule](docs/09-the-verification-protocol.md#schedule-checks): documentation and consistency checks for documentation-only work; critical checks, change-specific tests and required mutations on the Executor branch; the full suite at code integration into `main` before publication. An extra full suite on the branch needs a concrete sensitivity reason. Reruns after fixes remain required.
+- Record the hook's implemented routes separately from that policy. Missing capabilities require reviewed maintenance; retain existing mandatory checks until it is complete. Never bypass checks to simulate lighter routing. See [policy and hook support](docs/09-the-verification-protocol.md#policy-and-hook-support).
+- Use the enforcing hook's actual commands and environment for each required stage. If it runs those checks, do not duplicate an identical successful run immediately before it. Run uncovered required checks explicitly.
 - Select mutation evidence for new, modified or affected guards; preserve the Conductor's independent checks.
 - Follow the [background-work procedure](docs/04-the-wave-cycle.md#background-work) instead of unnecessary polling or unbounded waiting.
 - Investigate the original error before attributing a passing serial rerun to contention. An out-of-memory event or timeout is an observed symptom, not proof of an environmental root cause. Report an unresolved cause as unresolved; the failure remains blocking.
@@ -204,3 +206,4 @@ When using a local copy, synchronize it from this source instead of maintaining 
 |---|---|
 | 1.0 | First published edition |
 | 1.1 | Define proportionate verification and requirements for optional hook result reuse |
+| 1.2 | Separate documentation, branch and main checks; require verified hook support before changing enforcement |
