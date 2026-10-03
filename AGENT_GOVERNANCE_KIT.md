@@ -1,6 +1,6 @@
 # Multi-tool governance
 
-**Version 1.2** · An extension to Mawja for repositories using more than one agent tool.
+**Framework version: 1.2.0** · An extension to Mawja for repositories using more than one agent tool.
 
 Reference this file from the repository's rules. If linking is impractical, keep one copy in the repository root. Maintain one authoritative source.
 
@@ -67,6 +67,7 @@ Include:
 - A routing table naming the repository's skills.
 - Prohibitions and the reason for each.
 - The applicable commit-attribution format.
+- Scope and authorization rules, safe resource use, the repository package manager and explicit file staging.
 
 Measure instruction-file size before adding content. Keep it within the configured tool's reading limit. Put additional detail in the framework document and reference it from the entry point.
 
@@ -74,11 +75,11 @@ Measure instruction-file size before adding content. Keep it within the configur
 
 Before the session ends, commit findings that will be useful in future work: decisions, lessons and working rules. Use the destinations defined in [file architecture](docs/06-file-architecture.md) and the repository's existing conventions.
 
-Tool-local memory may index those records. It must not be the only location for durable knowledge.
+Promote permanent rules from task prompts to an authoritative repository document before the prompt is removed. Tool-local memory may index those records. It must not be the only location for durable knowledge.
 
 ### 3. Commit attribution
 
-Choose a fixed starting point for enforcement. Every commit after that point, including merge commits, must identify the tool that wrote it:
+For an adopting repository, choose a fixed starting point for enforcement. Mawja's own content repository follows its [maintainer policy](docs/maintaining.md#attribution); this does not change another project's attribution rules. Every commit after that point, including merge commits, must identify the tool that wrote it:
 
 ```text
 Co-Authored-By: <tool> <model> <email>
@@ -90,7 +91,7 @@ Do not rewrite existing history or move the starting point backwards. Provide an
 
 ### 4. Shared handover
 
-Keep one handover protocol in the repository and reference it from every tool. Tool-specific shortcuts must invoke that protocol without maintaining a separate copy.
+Keep one handover protocol in the repository and reference it from every tool. Use the [Conductor handover requirements](docs/17-conductor-handover.md) to cover current state, method, authority and recovery. Tool-specific shortcuts must invoke that protocol without maintaining a separate copy.
 
 ### 5. Enforcement
 
@@ -128,10 +129,11 @@ Use an isolated worktree when work runs in parallel or files may conflict.
 | Fallback | If a durable worktree is unavailable, push the branch after the first commit and every subsequent commit |
 | Local cleanup | After merge, remove the completed worktree and local branch once all work is confirmed preserved |
 | Remote cleanup | Follow the Owner's standing repository policy; do not request the same decision for every task |
-| Cleanup integration | Connect the cleanup sweep to task-prompt generation, rather than a push gate |
+| Cleanup integration | If the project automates cleanup, perform the reviewed sweep before task preparation. The supplied generator does not delete branches or worktrees |
+| Dependencies | Own installed dependencies, generated files and caches; inspect links and never write through them into the Owner's workspace |
 | Documentation | Record the isolation and cleanup rules in both the primary rules file and AGENTS.md |
 
-Before deleting an isolated copy, inspect all branch refs, stash, HEAD and uncommitted changes. Preserving HEAD alone does not establish that every change is saved.
+Treat every cleanup push as a potential hook run with owned test resources. Use isolated workspaces to compare revisions; do not use the Owner's stash as an experiment mechanism. Before deleting an isolated copy, inspect all branch refs, stash, HEAD and uncommitted changes. Preserving HEAD alone does not establish that every change is saved.
 
 To recover `wave/my-change` from a copy at `../task-worktree`, run the following command in the receiving repository. Use the actual copy path and branch name. The command does not modify the source copy.
 
@@ -150,7 +152,9 @@ This kit has no gate that checks whether repository knowledge is complete, hando
 - Cite document headings when reporting evidence.
 - Test each gate condition independently so one condition does not mask another.
 - If a guard's own compliance change invalidates its check, document the cycle in the affected item's record. Do not suppress it with an exception.
-- Preserve complete command output, including the failure cause.
+- Preserve complete command output, including the failure cause, in unique durable receipts. Do not weaken assertions or retry merely to obtain a preferred result.
+- Verify unstable technical claims against current primary documentation; distinguish it from measured project behavior.
+- Report warning-only checks and unsupported controls honestly; see [gate modes and baseline requirements](docs/appendix.md#f--gate-design-and-baselines).
 - Verify committed content rather than relying on the current working-tree copy.
 - Follow the [verification schedule](docs/09-the-verification-protocol.md#schedule-checks): documentation and consistency checks for documentation-only work; critical checks, change-specific tests and required mutations on the Executor branch; the full suite at code integration into `main` before publication. An extra full suite on the branch needs a concrete sensitivity reason. Reruns after fixes remain required.
 - Record the hook's implemented routes separately from that policy. Missing capabilities require reviewed maintenance; retain existing mandatory checks until it is complete. Never bypass checks to simulate lighter routing. See [policy and hook support](docs/09-the-verification-protocol.md#policy-and-hook-support).
@@ -188,7 +192,7 @@ Keep all required checks blocking. These conditions define adoption requirements
 - [ ] Every tool references the same repository-owned handover protocol.
 - [ ] Both gates run in the enforcing hook, not only in the command manifest.
 - [ ] Every gate has mutation evidence, a non-vacuity floor and documented limits.
-- [ ] Each new gate is registered in its script, command runner, enforcing hook and any documentation that reports the gate count.
+- [ ] Each new gate is registered in its manifest and actual enforcing runner/hook. Verify parity in both directions. Reference a counting command in documentation, or generate and check any displayed count.
 
 For a repository using one tool, add the second entry point when that tool is introduced, as specified in the setup classification.
 
@@ -198,12 +202,8 @@ Apply this kit with Mawja's framework. Keep framework content in its authoritati
 
 Follow the repository's naming conventions. AGENTS.md retains its name for tools that discover it by that name. Do not treat a gate without mutation evidence as completed enforcement.
 
-When using a local copy, synchronize it from this source instead of maintaining independent edits in both places. Keep the Mawja documentation available alongside the kit.
+Record the adopted framework release and commit. When a local rule changes the framework layer, notify the Conductor and obtain the Owner's decision about broader adoption; do not transfer it to other repositories automatically. When updating a local copy, review the upstream changes and preserve documented project configuration. Keep the Mawja documentation available alongside the kit.
 
 ## 6 · Version history
 
-| Version | Change |
-|---|---|
-| 1.0 | First published edition |
-| 1.1 | Define proportionate verification and requirements for optional hook result reuse |
-| 1.2 | Separate documentation, branch and main checks; require verified hook support before changing enforcement |
+The framework, documentation, kit and tools share the release recorded above, maintained from Mawja's authoritative `VERSION` file. See the single [change history](docs/CHANGELOG.md). Earlier kit-only edition numbers are historical and are not comparable to repository release tags.

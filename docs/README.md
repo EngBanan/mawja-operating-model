@@ -22,6 +22,9 @@ Use [Start here](00-foreword.md) to choose a reading path, try an example or ado
 | [12 · Limitations](12-transparency.md) | Scope, costs and operational requirements |
 | [13 · Adoption checklist](13-audit-your-structure.md) | Evaluate the workflow in a repository |
 | [14 · Failure patterns](14-five-failure-patterns.md) | Common gaps in measurements and checks |
+| [15 · Build quality](15-build-quality.md) | Design, state ownership, refactoring and structure review |
+| [16 · Safe execution and delivery](16-safe-execution-and-delivery.md) | Owned resources, handoff, integration and deployment |
+| [17 · Conductor handover](17-conductor-handover.md) | Transfer measured state, method and authority |
 
 ## Tutorials and reference
 
@@ -32,4 +35,5 @@ Use [Start here](00-foreword.md) to choose a reading path, try an example or ado
 - [Toolkit guide](../scripts/README.md), [configuration](../scripts/CONFIGURATION.md) and [troubleshooting](../scripts/TROUBLESHOOTING.md).
 - [Appendix](appendix.md): ledger format, type budgets and measurement contracts.
 - [Multi-tool governance](../AGENT_GOVERNANCE_KIT.md): repository rules and handover across tools.
+- [Version and changes](CHANGELOG.md), [maintainer policy](maintaining.md).
 - [References](references.md): related projects and concepts.

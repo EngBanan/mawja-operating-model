@@ -74,7 +74,7 @@
   <rect class="card" x="550" y="202" width="384" height="70" rx="10" stroke-width="1.5"/>
   <text class="num" x="570" y="226">05</text>
   <text class="ttl" x="570" y="248">Adversarial review</text>
-  <text class="sub" x="570" y="266">Test likely failure cases.</text>
+  <text class="sub" x="570" y="266">Review failure cases and structure.</text>
 
   <line class="arrow" x1="742" y1="272" x2="742" y2="292" stroke-width="1.5" marker-end="url(#a)"/>
 
@@ -93,7 +93,7 @@
   <line class="arrow" x1="934" y1="340" x2="982" y2="340" stroke-width="1.5" marker-end="url(#a)"/>
   <rect class="gate" x="992" y="290" width="212" height="100" rx="10" stroke-width="2"/>
   <text class="ttl gt" x="1006" y="318">High sensitivity?</text>
-  <text class="sub" x="1006" y="340">Stop before merge.</text>
+  <text class="sub" x="1006" y="340">Default: stop before merge.</text>
   <text class="sub" x="1006" y="358">Owner approval is required</text>
   <text class="sub" x="1006" y="376">before merging.</text>
 

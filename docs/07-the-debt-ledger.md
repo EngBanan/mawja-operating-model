@@ -39,6 +39,12 @@ node --import tsx scripts/conductor/wave-prompt.ts --next-number
 
 Use the returned number for the next debt item or decision.
 
+## Reserve ranges and merge records
+
+The next-number command observes current files; it does not allocate or lock identifiers. Before issuing a wave, reserve a closed range for its debt and decisions, including corrections, and a separate range for Conductor records. Record reservations in the project's shared coordination record. Stop and obtain a new range before exhausting one.
+
+At integration, reconcile shared ledgers and decision logs sequentially. Compare entries added on both sides of the merge base and confirm none disappeared or reused an identifier. Do not resolve a conflict by replacing one side wholesale. Closure requires the evidence for that item, not merely a preserved row.
+
 ---
 
 [Previous: 6 · File Architecture](06-file-architecture.md) · [Documentation index](README.md) · [Next: 8 · Sensitivity Classification](08-sensitivity-classification.md)

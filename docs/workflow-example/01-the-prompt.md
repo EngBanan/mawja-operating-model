@@ -27,10 +27,12 @@ Your goal: a process crash or kill during save leaves a complete notes file on t
 | Measurement | Value | Verification command |
 |---|---|---|
 | `main` HEAD | `3f9c2a1` | `git rev-parse --short HEAD` |
-| Type errors / ceiling | **2 / 2** · crash class **zero** | `npx tsx scripts/conductor/check-types-baseline.ts --json` |
-| Live gates | **3** | `npx tsx scripts/conductor/count-gates.ts` |
+| Type errors / ceiling | **2 / 2** · crash class **zero** | `node --import tsx scripts/conductor/check-types-baseline.ts --json` |
+| Registered guard commands | **3** | `node --import tsx scripts/conductor/count-gates.ts` |
 | Debt rows | **6** · open **2** | `npm run lint:debt-ledger:strict` |
-| **Your numbers start at** | **#9** | `npx tsx scripts/conductor/wave-prompt.ts --next-number` |
+| **Next available identifier** | **#9** | `node --import tsx scripts/conductor/wave-prompt.ts --next-number` |
+
+Reserved identifiers: #9 for Executor findings; #10 for the Conductor's merge decision. The next-number measurement does not allocate these reservations.
 
 ## Step 3: 🟢 What already works (⛔ do not rebuild it)
 - `store.load()` and `store.save()`: 41 tests green under `test:store`.
@@ -41,10 +43,18 @@ Your goal: a process crash or kill during save leaves a complete notes file on t
 **In:** `save()` writes to a temporary file in the same directory and renames it over the old file. The CLI reports success only after save completes. A process kill leaves either the old complete file or the new complete file. A note interrupted before completion may be absent.
 **Out:** deliberate deferrals F1 encryption (trigger: first shared machine) and F2 a backup copy (trigger: first lost note in the field), both in PROGRESS/FUTURE_ENHANCEMENTS.md. Power-loss durability and network filesystems are not promised by this wave.
 
+Owned files: src/store.ts, src/cli.ts, the new save guard, package.json and the debt ledger. Preserve the public load/save signatures and notes-file format. No broad refactoring is authorized; request a bounded extraction if needed.
+
+Design: the notes file is the authoritative persisted state. A completed rename changes it atomically within the supported filesystem; an interrupted operation may leave the prior complete value. Review error reporting and temporary-file cleanup separately from the atomicity claim.
+
 ## Step 5: Batch order
 1. `src/store.ts`: temp-file-and-rename; `src/cli.ts`: wait for save before reporting success. One commit.
 2. `scripts/governance/check-save-atomic.ts`: kill the saving process during repeated writes and refuse any file that fails to parse. Register `test:save-atomic` in package.json. One commit.
 3. Mark existing debt #7 closed with evidence. Propose decision #10 in the report; do not write DECISIONS.md. One commit.
+
+Build quality: reuse the store interface, preserve all existing note operations, separate any preparatory refactoring from the save change, and report the structure delta for the changed save path. Independent review challenges the actual diff as well as its test evidence.
+
+Delivery mode: remote branch delivery through the project hook. Record the advertised branch commit after pushing. Comparison base: the measured preparation commit 3f9c2a1. Run safe commands from the repository root after establishing the owned test environment; validate commands before issuing the actual task.
 
 Verification plan:
 
@@ -59,8 +69,10 @@ Hook support: in this fictional app, a project-specific hook runs the branch che
 Helper assignments: none. The Executor implements the storage change and the guard. No UI or print layout is affected, so no screenshots are required. If that scope changes, update the plan before acceptance.
 
 ## Step 6: Hard constraints (fixed)
-- Language of everything the owner reads: plain English, no jargon.
-- No new dependency.
+- Language of everything the owner reads: plain English; explain technical terms when needed.
+- No new dependency. Use an owned dependency installation and an isolated HOME for every CLI test.
+- Security and data: synthetic notes only; preserve existing access behavior and never write test notes into the Owner's home.
+- Release: the Conductor records build/full-suite evidence before publication. The Owner selects the deployment; external save/reopen verification and rollback remain release work.
 - Types: the ceiling is 2 and the crash class is zero: neither moves up.
 
 ## Step 7: Exit gates

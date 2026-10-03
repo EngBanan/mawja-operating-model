@@ -12,7 +12,7 @@ Check whether the rule applies to a whole operation or to each part, then verify
 
 Two runs can return the same incorrect value when they share faulty inputs or an environment issue.
 
-Use a separate observation or change a relevant condition to test the assumption behind the measurement.
+Use a separate observation or change a relevant condition to test the assumption behind the measurement. Validate the instrument with a known positive control and exercise the consumer path; a direct database call can bypass the failing application connection. A zero exit from an empty start script does not prove a service started.
 
 ## 3 · Fallback reported as success
 
@@ -34,6 +34,18 @@ A single skipped-check count can combine intentionally excluded checks, environm
 
 Report these states separately, with reasons. Apply the repository's acceptance policy to each category.
 
+## 6 · Mocked test, live provider call
+
+A test mocks its main provider, while an unmocked fallback calls a paid service. The fallback hides the failure and the test passes.
+
+Use owned resources, unusable provider credentials and a verified network boundary where available. Inspect denied calls and cover the server process too. Passing assertions alone do not prove isolation.
+
+## 7 · Correct count, wrong population
+
+A scan finds zero violations because its filter omits an affected directory. A browser check passes while inspecting the login page instead of the intended account surface.
+
+Report the population, filter and identity with the result. Exercise known positive and negative controls, including missing or empty fields. Investigate each metric family separately so an empty family cannot disappear inside a large total.
+
 ---
 
-[Previous: 13 · Adoption checklist](13-audit-your-structure.md) · [Documentation index](README.md) · [Next: Appendix: technical contracts](appendix.md)
+[Previous: 13 · Adoption checklist](13-audit-your-structure.md) · [Documentation index](README.md) · [Next: 15 · Build quality](15-build-quality.md)

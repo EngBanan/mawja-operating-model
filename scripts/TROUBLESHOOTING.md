@@ -189,3 +189,19 @@ A missing mypy module or incomplete mypy output is a configuration failure. Fix 
 Open check-python-baseline.py and inspect `SOURCE_DIRS`. Each listed directory must exist and contain Python files.
 
 Check the matching directory lists and file patterns in verify-wave.ts and wave-prompt.ts. Use the [Python configuration](CONFIGURATION.md#python) to keep these settings aligned, then run `npm run types:check`.
+
+## Prompt arguments with pnpm
+
+Use `pnpm run wave:check WAVE_PROMPT_MY_CHANGE.md`. The current parser also ignores a standalone `--`; an older copy may treat it as the filename. Follow [Update project copies](README.md#update-project-copies) and validate the installed command.
+
+## Claim runs in the wrong package
+
+`--claim` starts at the repository root unless `--claim-cwd` selects another directory. Set it explicitly for a monorepo and inspect the printed directory. Do not infer its directory from `CODE_ROOT`, which controls type and guard commands.
+
+## Project rule excerpt changed
+
+Keep the marked source authoritative. Commit an intentional source change and regenerate the prompt, then complete its task fields and run readiness. Do not edit the copied excerpt to resolve a contradiction; correct its source. Missing or duplicate markers are configuration errors.
+
+## Process ownership and test services
+
+Inspect the PID, listener, command and start time before stopping an owned process. A broad `pkill -f` pattern can match the invoking shell. Keep required owned services until all dependent checks and pushes finish, and confirm resulting state rather than relying only on an exit code. See [safe execution](../docs/16-safe-execution-and-delivery.md#own-the-test-environment).

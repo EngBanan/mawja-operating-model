@@ -48,3 +48,13 @@ node --test tests/test_check_runner.mjs
 The suite uses real Git repositories and subprocesses to exercise fresh execution, explicit reuse, the off switch, changed inputs, incomplete reports, expired evidence, failure history with reuse disabled, interrupted attempts and required later-stage failures. It also checks environment-value redaction in metadata. Fixtures use TMPDIR (TEMP on Windows) and are removed after each test.
 
 For a real application exercise in all three languages, follow [check-result reuse](../scripts/CHECK_REUSE.md#try-the-calculator-example). Introduce an incorrect calculator operation, confirm the check fails, restore it and confirm a fresh success. To validate a customized integration, also exercise the entire enforcing hook with reuse disabled and enabled.
+
+## Tool contracts
+
+With a generated TypeScript runtime and its pinned dependencies installed, run:
+
+```bash
+node tests/test_tool_contracts.mjs ../mawja-test-runtime
+```
+
+These tests cover the registration-only counter, committed prompt-rule excerpts, forwarded argument separators, claim working directories and failure propagation, and complete large TypeScript JSON output to a slow pipe reader. Prompt/claim policy cases use a controlled measurement adapter; the pipe case uses the real compiler. Fixtures use the configured temporary parent and are removed after each test. As with the other suites, use a durable owned parent for retained session work.

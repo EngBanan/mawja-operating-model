@@ -76,6 +76,20 @@ Apply these checks using the [verification protocol](09-the-verification-protoco
 
 For the underlying terminology, see [test techniques](https://astqb.org/4-1-test-techniques-overview/), [test levels and types](https://astqb.org/2-2-test-levels-and-test-types/) and [acceptance testing](https://istqb.org/certifications/certified-tester-acceptance-testing/). Mawja's role names and conventions are defined separately above.
 
+## Delivery and review terms
+
+| Term | Meaning |
+|---|---|
+| Structure delta | A measured comparison of affected code structure before and after a change |
+| Characterization test | A test recording existing behavior before structural changes |
+| Warning-only check | A check reporting findings without blocking the action |
+| Environmental check | A check requiring specified services or environment; unavailable execution is not success |
+| Local handoff | An explicitly selected delivery of a durable branch and verified bundle, with declared backup limits |
+| Production build | The artifact-building process for the intended deployment configuration, distinct from type checking |
+| Deployment verification | Observing the target environment's behavior after deployment through the real consumer path |
+
+See [build quality](15-build-quality.md), [safe execution and delivery](16-safe-execution-and-delivery.md) and [gate modes](appendix.md#f--gate-design-and-baselines).
+
 ---
 
 [Previous: Start here](00-foreword.md) · [Documentation index](README.md) · [Next: 1 · The Governing Principle](01-the-governing-principle.md)

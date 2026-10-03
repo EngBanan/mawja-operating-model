@@ -31,6 +31,22 @@ For user-facing work, you can run the agreed tasks and record your observations 
 
 See the [sample report](workflow-example/02-the-report.md) and [independent review](workflow-example/03-the-verification.md).
 
+## Authority and communication
+
+Interpret the Owner's request in context. A request for explanation or advice alone does not authorize implementation. An instruction to perform work authorizes the necessary actions within its scope; honor standing authorization without repeatedly asking for the same decision. Do not extend approval to another repository, destructive action or release target. If an action was rejected, do not try another route to perform it. Report accidental changes and follow the agreed recovery policy.
+
+Explain the result first, then the recommendation and any actual decision needed. Use plain language while retaining useful technical terms, with a brief explanation where needed. The Owner may want to understand Push, Merge, Review and Deploy without writing code. Product interface text follows its own audience and wording requirements.
+
+A standing policy may authorize ordinary pushes after completed work; it does not authorize forced pushes, deletion or deployment. An explicitly chosen local handoff changes that task's delivery route.
+
+Record communication preferences in the working agreement. A compact status table, a file path instead of a pasted prompt, or fewer reminders about accepted deferrals are options. Keep deferred work discoverable with its trigger; new material risk still needs reporting. Current measurements need a dated command or evidence reference. Label earlier results and inference honestly.
+
+## Independent ownership
+
+Begin acceptance review after an explicit handoff of a fixed commit. Observing an active Executor branch is not delivery. The Conductor reviews the actual diff, challenges failure cases and verifies significant findings with a reproducer or precise code evidence. Read the implementation as well as mutation results; either can expose defects the other misses.
+
+An additional reviewer can address a named risk, but repeating the same review with more agents is not a guarantee. No author accepts their own correction independently, including a Conductor's test-fixture edit. See [integration responsibilities](16-safe-execution-and-delivery.md#conductor-intake-and-integration) and [correction rounds](04-the-wave-cycle.md#correction-rounds).
+
 ---
 
 [Previous: 1 · The Governing Principle](01-the-governing-principle.md) · [Documentation index](README.md) · [Next: 3 · Why a Separate Conversation](03-why-a-separate-conversation.md)

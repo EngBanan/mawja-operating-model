@@ -30,6 +30,14 @@ Name each helper task in the prompt. When a question requires an unapproved deci
 
 The Conductor's independent review remains separate from the people or agents that wrote the implementation. An implementation helper cannot provide the independent review of its own work. These delegation rules rely on task assignment, Executor review and the Conductor's assessment; the supplied toolkit does not determine who wrote each line.
 
+## Choose delegation by capability
+
+Before delegating, confirm access to the required instructions, tools, data and question channel. If the task may need an Owner decision that the helper cannot obtain, use a full implementation conversation. A worktree isolates files; it does not establish equivalent agent capabilities or context.
+
+Bound measurement and review tasks by their expected evidence and a named question. Keep decisions, acceptance and record updates with the responsible Conductor. Review helpers may challenge work they did not author; this does not expand the implementation allowlist. Resume only unfinished checks after an interruption when earlier evidence remains applicable.
+
+Choose model capability and effort for the task's risk and measured performance. Mawja does not require a named model tier or a fixed committee size. Reduce overlapping context and redundant launches before weakening review coverage.
+
 ---
 
 [Previous: 2 · The Three Roles](02-the-three-roles.md) · [Documentation index](README.md) · [Next: 4 · The Wave Cycle](04-the-wave-cycle.md)

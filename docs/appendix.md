@@ -1,6 +1,6 @@
 # Appendix: technical contracts
 
-This reference specifies the toolkit prerequisites, ledger format and measurement output. Start with the [examples](../examples/README.md) for a runnable project.
+This reference specifies the toolkit prerequisites, ledger format and measurement output. Explicit HTML anchors retain compatibility with earlier section links. Start with the [examples](../examples/README.md) for a runnable project.
 
 <a id="a--what-the-four-commands-assume"></a>
 
@@ -46,6 +46,12 @@ A decision in the log is a level-two heading with the same number range:
 
 ```markdown
 ## DEC #13 Uploads retry three times, then stop
+
+Status: Accepted
+Decision: Stop after three attempts and report the failure.
+Evidence: <review and test evidence>
+Integration: Pending
+Deployment: Not requested
 ```
 
 The ledger and the log share one range: #13 follows #12 wherever it lands. A fresh pair with no numbered entries starts at #1; titles and an empty table header are allowed. Sub-items such as `#12-a` use the same base number, so they reserve #12 too. A malformed numbered entry is an error, not a fresh ledger.
@@ -101,7 +107,7 @@ The prompt generator records these measurements and their sources:
 | `Type-error count` | **Your type checker** | Run it in check-only mode without writing output files, then count the errors |
 | `The ceiling` | A snapshot file in the repository | Read the committed value |
 | `Crash class` | The same checker, filtered to named kinds | Count matches. Expected: zero |
-| `Gate count` | The gates manifest | Count live entries |
+| `Guard command count` | The gates manifest | Count registered matching commands; wiring and behavior are not proved |
 | `Debt counters` | The debt ledger | The counting gate itself ([Appendix B](#b--debt-and-decision-format)) |
 | `Next free number` | The ledger and the decision log **together** | Scan both, take the maximum + 1 |
 
@@ -122,7 +128,7 @@ Example output consumed by the generator and verifier:
   "syntaxDiagnostics": [] } // reference checker details, not a replacement for crashHits
 
 // the gate count · anywhere in the output
-(12 live gates
+(12 registered guard commands
 ```
 
 `ok`, `count` and `baseline` are required. `ok` is the blocking verdict; `kind` and `filesOverBudget` explain a failure. `crashClass` and `crashHits` describe what was checked and what fired: without both, the tools report the crash class as **not measured**, not zero.
@@ -151,10 +157,33 @@ This catches empty scans caused by incorrect paths, unmatched patterns or unsupp
 
 Set floors for the adopting repository. The supplied example ledger requires one row and allows zero closed rows.
 
+## F · Gate design and baselines
+
+These are requirements for project integrations. The supplied type checkers implement the existing snapshot ratchet described above; they do not yet enforce commit/decision provenance, per-family collapse detection, atomic baseline replacement or Conductor-only baseline approval.
+
+| Mode | Meaning |
+|---|---|
+| Blocking | Failure prevents the governed action |
+| Ratchet | A blocking limit prevents regression against a reviewed baseline |
+| Warning | Findings are reported without blocking; do not describe them as enforced |
+| Environmental | Execution requires a named environment; unavailable evidence is unmeasured and follows an explicit acceptance policy |
+
+Keep an authoritative manifest and verify wiring in both directions against the active hook or runner. A registered command is not proof of enforcement. An exemption from blocking does not exempt a check from evidence that it runs. Introduce noisy new metrics as warnings only through a recorded decision, calibrate them, then separately approve promotion to blocking.
+
+Calibrate scan floors from an observed valid population. Print the actual scope, keys and count; do not set an impossible floor. Allowlist entries need reasons and checks for stale exemptions. Test the exemption path as well as rejection. When a guard depends on an installed library's inventory, derive it from that version or validate its pinned definition when upgrading. For source analysis, prove that comment handling and alternative syntax cannot hide relevant code; state the supported scope precisely.
+
+### Re-taking a baseline
+
+Record the source commit, measurement date, definition/tool version, decision, reason and whether a snapshot is provisional. Integration review establishes the accepted baseline on the clean integrated source. Record how a definition change is authorized; it must not be smuggled in as a lower count. Ordinary updates tighten budgets.
+
+When a metric family disappears, compare the current instrument on both the baseline source and changed source in owned workspaces. A lower count is not proof of a fix if the instrument lost its inputs. Analyze each family and its keys, use positive controls, and investigate definition or dependency changes. Read numeric fields by their named contract rather than summing unrelated JSON fields.
+
+A future baseline writer should reject ambiguous or dirty source state, validate nonempty coverage and write atomically, printing the key-level difference. Record these as missing implementation work where the installed tool does not support them. Keep existing checks blocking in the meantime.
+
 ## Adoption
 
 Use the [adoption checklist](13-audit-your-structure.md), establish [repository records](06-file-architecture.md) and [debt tracking](07-the-debt-ledger.md), then configure the [toolkit](../scripts/README.md).
 
 ---
 
-[Previous: 14 · Failure patterns](14-five-failure-patterns.md) · [Documentation index](README.md) · [Next: References](references.md)
+[Previous: 17 · Conductor handover](17-conductor-handover.md) · [Documentation index](README.md) · [Next: References](references.md)

@@ -13,7 +13,7 @@
  * the manual review.
  */
 import { execFileSync, execSync } from "node:child_process"
-import { existsSync } from "node:fs"
+import { existsSync, statSync } from "node:fs"
 import { dirname, join, relative, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -44,7 +44,7 @@ const NOT_CODE: readonly string[] = ["WAVE_PROMPT_"]
  * `crashClass` (guarded codes) and `crashHits` (errors found). Without both, step ③ says **not measured**,
  * never that it is zero.
  */
-const TYPES_CMD = "npx tsx scripts/conductor/check-types-baseline.ts --json"
+const TYPES_CMD = "node --import tsx scripts/conductor/check-types-baseline.ts --json"
 
 /**
  * Directories relative to CODE_ROOT and regex fragments for file endings.
@@ -350,6 +350,15 @@ function main() {
   const base = arg("base") ?? "main"
   const claimCmd = arg("claim")
   const noGuardReason = arg("no-guard-ok") ?? null
+  const claimCwd = resolve(ROOT, arg("claim-cwd") ?? ".")
+  if (arg("claim-cwd") !== undefined && !claimCmd) {
+    console.error("⛔ CONFIG: --claim-cwd requires --claim")
+    process.exit(2)
+  }
+  if (claimCmd && (!existsSync(claimCwd) || !statSync(claimCwd).isDirectory())) {
+    console.error(`⛔ CONFIG: claim working directory is not a directory: ${claimCwd}`)
+    process.exit(2)
+  }
 
   line(`\n${C.b}🔍 Conductor's check${C.x}: ${C.b}${head}${C.x} vs ${base}\n`)
   // Resolve all requested commits before verification; invalid refs exit 2.
@@ -417,7 +426,7 @@ function main() {
   let claim: WaveFacts["claim"] = null
   let claimOut = ""
   if (claimCmd) {
-    const r = runWithCode(claimCmd)
+    const r = runWithCode(claimCmd, claimCwd)
     claim = { command: claimCmd, exitCode: r.code }
     claimOut = r.out
   }
@@ -474,7 +483,7 @@ function main() {
 
   line(`\n${C.b}${C.r}   ④ Verify the central claim independently.${C.x}`)
   if (claim) {
-    line(`${C.d}      Running the reviewer-supplied command (from ${ROOT}):${C.x} ${claim.command}`)
+    line(`${C.d}      Running the reviewer-supplied command (from ${claimCwd}):${C.x} ${claim.command}`)
     claimOut.trim().split("\n").slice(0, 8).forEach((l) => line(`${C.d}      │ ${l.slice(0, 110)}${C.x}`))
     if (claim.exitCode === 0) line(`${C.y}      ⚠️ The command succeeded. ${C.b}Review its output against the central claim.${C.x}`)
     else line(`${C.r}      🔴 The command failed with code ${claim.exitCode}: the claim is not verified${C.x}`)

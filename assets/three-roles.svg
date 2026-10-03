@@ -31,7 +31,7 @@
   <circle class="dot" cx="66" cy="198" r="2.5"/>
   <text class="li" x="78" y="203">Approves spend · decides when to ship</text>
   <line class="rule" x1="60" y1="222" x2="352" y2="222" stroke-width="1"/>
-  <circle class="nocirc" cx="67" cy="241" r="7" fill="none" stroke-width="1.8"/><line class="nocirc" x1="62.5" y1="236.5" x2="71.5" y2="245.5" stroke-width="1.8"/><text class="never" x="82" y="246">Never asked for technical detail</text>
+  <text class="li" x="60" y="246">Technical terms explained clearly</text>
 
   <!-- ══ Executor ══ -->
   <rect class="exec" x="458" y="56" width="340" height="214" rx="12" stroke-width="2"/>

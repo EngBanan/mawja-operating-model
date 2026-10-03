@@ -5,7 +5,7 @@ A shortened verification example for the [fictional notes app](README.md). The t
 The verifier uses `CODE_DIRS = ["src"]` for this example. The branch changes the following files; the decision is still a proposal in the report:
 
 ```text
-$ git diff --name-only main...wave/w3-atomic-save
+$ git diff --name-only 3f9c2a1...wave/w3-atomic-save
 PROGRESS/TECHNICAL_DEBT.md
 package.json
 scripts/governance/check-save-atomic.ts
@@ -23,9 +23,9 @@ $ npm run test:store
 41 passing
 $ npm run test:store-shape
 Shape checks passed
-$ npm run wave:verify -- --base=main --branch=wave/w3-atomic-save
+$ npm run wave:verify -- --base=3f9c2a1 --branch=wave/w3-atomic-save
 
-🔍 Conductor's check: wave/w3-atomic-save vs main
+🔍 Conductor's check: wave/w3-atomic-save vs 3f9c2a1
    5 files changed · 2 code · 1 gates · 0 tests · 1 docs
    ⑤ ✅ The tree is clean
    ③ ✅ Types 2/2 · crash class zero (3 guarded codes)
@@ -58,49 +58,67 @@ The last command prints nothing. The guard caught a corrupt result even though t
 
 ## What the Conductor did: step ④
 
-The claim is that an interrupted save leaves a complete, readable file on the supported local filesystem. The Conductor runs a separate probe through the CLI. The notes file exists before the probe starts. In this example app it is a JSON array of note strings; no other writer runs during the probe.
+The claim is that an interrupted save leaves a complete, readable file on the supported local filesystem. The Conductor runs a separate process-interruption smoke probe through the CLI. Use a dedicated evidence directory outside any live workspace. The probe creates its own home directory and initializes the example app's JSON array there; no other writer runs. This POSIX example assumes the fictional CLI resolves its data directory from HOME. Verify that contract for the real application before running it.
 
 ```python
 import json
+import os
 import signal
 import subprocess
+import tempfile
 import time
 import uuid
 from pathlib import Path
 
-# The example CLI stores a JSON array of note strings.
-path = Path.home() / ".keep" / "notes.json"
-def read_notes():
-    notes = json.loads(path.read_text())
-    assert isinstance(notes, list) and all(isinstance(n, str) for n in notes)
-    return notes
+# Set to a durable evidence directory owned by this review.
+evidence = Path(os.environ["MAWJA_EVIDENCE_DIR"]).resolve()
+assert evidence.is_dir()
+with tempfile.TemporaryDirectory(prefix="notes-probe-", dir=evidence) as owned:
+    env = dict(os.environ, HOME=owned)
+    path = Path(owned) / ".keep" / "notes.json"
+    path.parent.mkdir()
+    path.write_text("[]")
 
-before = read_notes()
-control = f"save control {uuid.uuid4()}"
-subprocess.run(["keep", "add", control], check=True)
-assert read_notes() == before + [control]  # prove the CLI actually saves
+    def read_notes():
+        notes = json.loads(path.read_text())
+        assert isinstance(notes, list) and all(isinstance(n, str) for n in notes)
+        return notes
 
-interrupted = 0
-for i in range(20):
     before = read_notes()
-    note = f"interruption probe {uuid.uuid4()}"
-    process = subprocess.Popen(["keep", "add", note])
-    time.sleep(0.01)
-    if process.poll() is None:
-        process.kill()
-    code = process.wait()
-    after = read_notes()
-    if code == -signal.SIGKILL:
-        interrupted += 1
-        assert after in (before, before + [note])
-    else:
-        assert code == 0, f"CLI failed with exit {code}"
-        assert after == before + [note]
-assert interrupted > 0, "No process was interrupted; this run tested no interruption."
-print(f"{interrupted} interrupted processes; every result was a complete old or new file.")
+    control = f"save control {uuid.uuid4()}"
+    subprocess.run(["keep", "add", control], env=env, check=True)
+    assert read_notes() == before + [control]
+
+    interrupted = 0
+    for i in range(20):
+        before = read_notes()
+        note = f"interruption probe {uuid.uuid4()}"
+        process = subprocess.Popen(["keep", "add", note], env=env)
+        try:
+            time.sleep(0.01)
+            if process.poll() is None:
+                process.kill()
+            code = process.wait()
+        finally:
+            if process.poll() is None:
+                process.kill()
+                process.wait()
+        after = read_notes()
+        if code == -signal.SIGKILL:
+            interrupted += 1
+            assert after in (before, before + [note])
+        else:
+            assert code == 0, f"CLI failed with exit {code}"
+            assert after == before + [note]
+    assert interrupted > 0, "No process was interrupted; this run tested no interruption."
+    print(f"{interrupted} interrupted processes; every result was a complete old or new file.")
 ```
 
-The probe first proves a successful save, rejects CLI failures, and checks the complete old or new contents after each attempt. It also refuses success if no process was interrupted. It does not prove every timing boundary, power-loss durability, or that an unfinished note was saved. The automatic guard and the Conductor's different mutation provide additional evidence about the partial-write failure. The Owner sees these limits with the recommendation.
+The probe first proves a successful save, rejects CLI failures, and checks the complete old or new contents after each attempt. It also refuses success if no process was interrupted. A process may be killed during CLI startup: this smoke probe does not establish that execution reached the write boundary. It does not prove atomic saving, every timing boundary, power-loss durability, or that an unfinished note was saved. A claim about interruption during the write itself requires synchronization on a verified write-boundary signal. The automatic guard and the Conductor's different mutation provide additional evidence about the partial-write failure. The Owner sees these limits with the recommendation.
+
+## Structure review
+
+The Conductor inspects the actual store and CLI diff, checks the supplied structure measurements and confirms that persistence decisions remain in the store. The review also covers temporary-file cleanup and error paths; a passing atomicity probe alone does not establish those properties.
 
 ## The verdict
 

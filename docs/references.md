@@ -27,6 +27,8 @@ Consult each project's documentation for its current requirements and supported 
 | Technical debt | Ward Cunningham, [The WyCash Portfolio Management System](https://c2.com/doc/oopsla92.html), describes the ongoing cost of postponing code consolidation |
 | Ratcheting | [Betterer: Introduction](https://phenomnomnominal.github.io/betterer/docs/introduction/) describes enforcing incremental improvement and rejecting regressions |
 | Baselines | [Betterer: Recorded results](https://phenomnomnominal.github.io/betterer/docs/introduction/#how-does-betterer-work) illustrates saving test results for comparison with later runs |
+| Refactoring | Martin Fowler, [Workflows of Refactoring](https://martinfowler.com/articles/workflowsOfRefactoring/fallback.html), describes separating behavior-preserving changes from new behavior |
+| Changed-code quality | [Sonar: Clean as You Code](https://docs.sonarsource.com/sonarqube-server/9.9/user-guide/clean-as-you-code/) focuses quality control on new and changed code |
 | Required checks | [GitHub: Protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches) describes status-check requirements for merging |
 
 See [engineering foundations](11-what-this-framework-is-built-on.md) for how Mawja applies these concepts.

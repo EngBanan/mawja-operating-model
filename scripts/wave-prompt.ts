@@ -38,20 +38,20 @@ const CODE_ROOT = ""
  * Both are needed to report the crash count. The JSON determines the verdict;
  * the command's exit status is not used.
  */
-const TYPES_CMD = "npx tsx scripts/conductor/check-types-baseline.ts --json"
+const TYPES_CMD = "node --import tsx scripts/conductor/check-types-baseline.ts --json"
 
 /**
  * Gate-count command, run from CODE_ROOT.
  * GATES_COUNT_RE must capture its reported count in group 1.
  */
-const GATES_CMD = "npx tsx scripts/conductor/count-gates.ts"
-const GATES_COUNT_RE = /\((\d+)\s+live gates/
+const GATES_CMD = "node --import tsx scripts/conductor/count-gates.ts"
+const GATES_COUNT_RE = /\((\d+)\s+(?:registered guard commands|live gates)/
 
 /**
  * The files every wave prompt tells the Executor to read first, in order.
  * Section 6 of the document explains what each one answers.
  */
-const FIXED_READS = "`CLAUDE.md` (project rules) · `_docs/CONSTITUTION.md` (the definition of \"done\") · `LESSONS_LEARNED.md`"
+const FIXED_READS = "⟪TODO: authoritative project rules, definition of done and relevant lessons⟫"
 
 /** Your debt ledger and decision log, relative to the repository root. They share one numbering range. */
 const DEBT_LEDGER = "PROGRESS/TECHNICAL_DEBT.md"
@@ -64,6 +64,8 @@ const RUN_GUARD = "npm run"
 const MEASURED_EXT = /\.(ts|tsx|mts|cts)$/
 /** Checker name printed in the project constraints and exit gates. */
 const TYPE_LABEL = "tsc"
+/** Optional root-relative files with one mawja:rules:start/end block each. */
+const RULE_SOURCES: readonly string[] = []
 // ════════════════════════════ END CONFIG ════════════════════════════════════
 
 /**
@@ -311,9 +313,9 @@ function measuredTable(m: Meta): string {
 |---|---|---|
 | \`${m.branch}\` HEAD | \`${m.head}\` | \`git rev-parse --short HEAD\` |
 | Type errors / ceiling | **${m.tscCount} / ${m.tscBaseline}** · ${m.tscOk ? crash : `🔴 **not clean**: generated with --force · ${crash}`} | \`${TYPES_CMD}\` (from \`${CODE_ROOT || "."}\`) |
-| Live gates | **${m.gates}** | \`${GATES_CMD}\` (from \`${CODE_ROOT || "."}\`) |
+| Registered guard commands | **${m.gates}** | \`${GATES_CMD}\` (from \`${CODE_ROOT || "."}\`) |
 | Debt rows | **${m.debtRows}** · open **${m.debtOpen}** | \`${RUN_GUARD} lint:debt-ledger:strict\` (from \`${CODE_ROOT || "."}\`) |
-| **Your numbers start at** | **#${m.nextNumber}** | \`${nextNumberCommand()}\` (from the repository root; prints the next free number) |`
+| **Next available identifier** | **#${m.nextNumber}** | \`${nextNumberCommand()}\` (from the repository root; prints the next free number) |`
 }
 
 function template(m: Meta, title: string): string {
@@ -329,9 +331,9 @@ ${META_CLOSE}
 
 Your goal: ⟪TODO: the wave's goal in one sentence⟫
 
-Address reliability, security, performance and accessibility within the defined scope.
+Address maintainability, reliability, security, performance and accessibility within the defined scope.
 
-**Mode:** resolve routine implementation choices within scope and document them. Commit after each batch. Report at the stop gate below when complete, or earlier if an Owner decision blocks progress.
+**Mode:** resolve routine implementation choices within scope and document them. Commit after each batch. Report at the stop gate below when complete, or earlier if an unapproved decision or a structural conflict blocks progress. A question asking for advice is not authorization to change files; continue actions already authorized within their scope.
 
 > ⚠️ **Naming conventions in this project**: ⟪TODO: the visible project name, live domain if applicable, and exact path, container and database identifiers required by this task⟫. Use exact identifiers in commands and the current project name in text for the Owner.
 ${forced}
@@ -364,6 +366,8 @@ ${measuredTable(m)}
 
 > Debt and decisions share one number range across \`${DECISION_LOG}\` and \`${DEBT_LEDGER}\`.
 
+**Reserved identifiers:** ⟪TODO: closed range assigned to this wave and its corrections, or None needed; identify separate Conductor reservations⟫. The measured next number is not a reservation. Stop before exceeding the assigned range.
+
 ### Task-specific measurements
 ⟪TODO: every number the conductor measured for this wave, each with its command and the environment it was measured in⟫
 
@@ -371,7 +375,7 @@ ${measuredTable(m)}
 
 ## Step 3: 🟢 What already works (⛔ **do not rebuild it**)
 
-> Preserve and reuse these existing capabilities.
+> Preserve and reuse these existing capabilities. For consolidation or replacement, record the capabilities of each source, the required union and evidence for retained behavior; removals need an accepted scope decision.
 
 ⟪TODO: name the existing capabilities this task relies on and record their check results⟫
 
@@ -387,9 +391,22 @@ ${measuredTable(m)}
 
 ---
 
+### Ownership and acceptance
+
+**Owned files and frozen interfaces:** ⟪TODO: permitted files/modules, stable interfaces and accepted limitations⟫
+**Correction contract:** ⟪TODO: for a correction, the closed finding list, negative cases, valid controls and acceptable conservative rejection; otherwise Not applicable⟫
+**Preparatory refactoring:** ⟪TODO: authorized extraction and preservation tests, a separate preparatory task, or None needed⟫
+**Design note:** ⟪TODO: for significant code changes, entry points, authoritative state owners, transitions and impossible states; otherwise Not applicable with reason⟫
+
 ## Step 5: Batch order
 
 ⟪TODO: logical batches in order, with one commit per batch⟫
+
+### Build quality
+
+For code changes, read existing public interfaces before adding a function. Reuse a rule with the same responsibility; keep unrelated behavior separate. Keep one authoritative owner per fact and justify any derived cache's consistency contract. Separate behavior-preserving refactoring from behavior changes in distinct commits with preservation evidence. Find all affected consumers and fix policy at its shared boundary. Preserve existing capabilities and edge cases when consolidating implementations. Prefer tests through public entry points. Report the relevant structure delta for significant changes. You own implementation quality; stop and report if scope would force a fragile workaround. For documentation-only work, record why this section is not applicable.
+
+${renderProjectRules()}
 
 **Verification plan:** ⟪TODO: classify the actual change; name documentation-only checks or critical and change-specific branch checks; required mutations and visual evidence; full-suite command and responsible role for code integration into main; the Conductor's independent checks; give a concrete sensitivity reason for any extra full suite on the Executor branch, or state none⟫
 
@@ -399,11 +416,17 @@ ${measuredTable(m)}
 | Executor's code branch | The project's critical checks, tests for changed and affected behavior, and required targeted mutations |
 | Code integration into main | The full project suite on the exact integrated revision before publication or deployment; the Conductor confirms the evidence |
 
-Run targeted checks during each batch. An extra full suite on the Executor branch needs a concrete sensitivity reason naming the risk and why targeted checks are insufficient. A branch full run does not remove the full check at code integration into main. After a fix, rerun affected checks and dependencies; establish full-suite evidence for the corrected integrated revision before publication.
+Run targeted checks during each batch. An extra full suite on the Executor branch needs a concrete sensitivity reason naming the risk and why targeted checks are insufficient. A branch full run does not remove the full check at code integration into main. After a fix, rerun affected checks and dependencies; for code integration, establish full-suite evidence for the corrected integrated revision before publication.
+
+**Command preflight:** ⟪TODO: pinned comparison-base commit; commands with working directories, prerequisites and safe validation results; list actions that must await authorization⟫
+
+**Delivery mode:** ⟪TODO: remote branch delivery, or Owner-authorized local handoff with decision, planned durable branch/bundle path, required checksum/commit evidence at delivery and declared loss exposure⟫
+
+**Independent review:** ⟪TODO: reviewer, actual diff and failure cases to challenge, structure review and evidence; an author cannot independently approve their own change⟫
 
 **Hook support:** ⟪TODO: record the effective hook's actual routes, commands and evidence; name missing capabilities and their maintenance record, or state none; distinguish currently mandatory extra checks from sensitivity-driven checks⟫
 
-The schedule does not change installed enforcement. If the hook still requires the full suite on every branch, keep it until reviewed routing maintenance is complete. Run uncovered required checks explicitly. Do not disable or skip the hook to imitate a missing route. The supplied generator, prompt checker and branch verifier still run their configured type measurements, including for documentation tasks; the optional check runner does not select stages.
+The schedule does not change installed enforcement. For a branch push, keep the installed hook requirements until reviewed routing maintenance is complete. An explicitly authorized local handoff performs no push; report its unrun hook and retained checks honestly. Code integration into main still requires the full suite. Run uncovered required checks explicitly. Do not disable or skip the hook to imitate a missing route. The supplied generator, prompt checker and branch verifier still run their configured type measurements, including for documentation tasks; the optional check runner does not select stages.
 
 **Helper assignments:** ⟪TODO: name each bounded helper task and its files, or state none; identify restricted parts, question routing and how you will review every changed line⟫
 
@@ -424,13 +447,17 @@ For documentation-only work that does not change executable behavior, record cod
 | | |
 |---|---|
 | **Language** | ⟪TODO: specify the language and tone for user-facing text and reports to the Owner⟫ |
-| **Numbers** | Every measurement includes its command and environment. Remeasure in the target environment; do not reuse a result from another environment. |
+| **Numbers** | Every current measurement includes its command, filter, date and environment. Confirm a positive control for absence claims; label historical evidence and unmeasured values explicitly. |
 | **Limits** | Every operational limit must be configurable at runtime. Do not hard-code it in the source. Name the gate that enforces it: ⟪TODO: your operational-limits gate⟫ |
 | **Isolation** | ⟪TODO: your data-access rule: which layer alone may reach the database, and what every function that reads a user's data takes as its first argument⟫ |
 | **Money** | ⟪TODO: your single conversion point from raw cost to a charged amount, and the one module a monetary constant may live in⟫ |
+| **Security** | ⟪TODO: access boundaries, ordinary-user and denied-user cases, sensitive outputs and named security checks; or Not applicable with reason⟫ |
+| **Environment** | ⟪TODO: owned workspace/dependencies, database, queue, accounts, ports, network restrictions and short readiness probes; or Not applicable⟫. Do not borrow or stop the Owner's live resources without authorization. Serialize heavy checks on shared resources; keep required services through final delivery. |
+| **Data** | Use synthetic, queryably marked records and clean only this run's data. Restore measured prior settings. Dry-run data corrections; destructive changes require the applicable approval and recovery plan. |
+| **Release** | ⟪TODO: build, deployment notes, target revision/environment, authorization scope, external checks and rollback; or Not applicable⟫. Accepted, merged, pushed and deployed are separate states. |
 | **The guard** | Prove new, modified or affected guards with targeted mutations, including effects through runners, configuration, discovery, fixtures, dependencies or protected code. Confirm the intended assertion fails and then passes after restoration. Include missing behavior and incorrect values where relevant, as specified in Section 9. Do not replay every historical mutation automatically; preserve the Conductor's different mutation for code review. For documentation-only work, record Not applicable and the reason. |
 | **Checks** | Follow the Step 5 schedule: documentation and consistency checks for documentation-only work; critical checks, change-specific tests and required mutations on the Executor branch; the full suite at code integration into main before publication. Extra branch full runs need a concrete sensitivity reason, unless current enforcement still requires them pending maintenance. Do not duplicate an identical successful hook run manually. Run the verifier once per unchanged verification stage. Fixes, changed inputs, incomplete evidence or a specific review concern require affected checks and dependencies again. Keep existing acceptance criteria. |
-| **Evidence** | Record each result's command, commit, tree, environment, inputs, scope, acceptance criteria and complete output. Reuse between hook attempts requires a reviewed integration that verifies eligibility and inputs. The optional run-checks.mjs tool is disabled by default; copying it does not establish eligibility. An older success cannot override a later failed or unfinished check, even if reuse was disabled then. Keep gates blocking and never bypass them with git push --no-verify. |
+| **Evidence** | Record each result's command, working directory, commit, tree, environment identity, inputs, scope, acceptance criteria and complete output in a unique durable location; redact secrets and do not overwrite receipts. Reuse between hook attempts requires a reviewed integration that verifies eligibility and inputs. The optional run-checks.mjs tool is disabled by default; copying it does not establish eligibility. An older success cannot override a later failed or unfinished check, even if reuse was disabled then. Keep gates blocking and never bypass them with git push --no-verify. |
 | **Visual evidence** | Capture named affected surfaces, including shared-component effects. Add newly discovered impacts with a reason. Do not claim the hook covers unmeasured behavior. |
 | **\`${TYPE_LABEL}\`** | For code and any type measurement required by installed tools: does not exceed **${m.tscCount}** · and the crash class is **zero** |
 | **The tree** | Clean at handover. ⛔ No leftover temporary scripts |
@@ -443,26 +470,31 @@ For documentation-only work that does not change executable behavior, record cod
 | # | Item | ✅ |
 |---|---|---|
 | 1 | Any required type measurement: \`${TYPE_LABEL}\` ≤ **${m.tscCount}** and the crash class is zero; retain measurements required by installed tools | ☐ |
-| 2 | Keep the **${m.gates}** inherited gates, run the checks applicable to this change and stage, and report the final gate count | ☐ |
+| 2 | Account for the **${m.gates}** registered guard commands, run applicable checks and report additions or reviewed retirements; registration does not prove execution | ☐ |
 | 3 | No regressions in existing behavior | ☐ |
 | 4 | Incremental commits: one per batch | ☐ |
-| 5 | The tree is clean and the branch is pushed | ☐ |
+| 5 | The tree is clean and the selected delivery mode is complete: remote head verified, or local bundle verified with checksum and commit | ☐ |
 | 6 | Documentation-only or code-branch checks meet the criteria on the final Executor commit; record evidence, any extra full-run reason, hook limitations and required reruns. For code, the main full-suite obligation is assigned, not claimed completed here; for documentation-only work, record it as not applicable | ☐ |
 | 7 | New, modified or affected guards have targeted mutation evidence and pass after restoration; for documentation-only work, record Not applicable and the reason | ☐ |
 | 8 | Named visual evidence is complete, with newly identified impacts and unmeasured behavior reported | ☐ |
 | 9 | Helper work follows the allowlist and restrictions; every changed line was reviewed and decisions recorded | ☐ |
+| 10 | Review findings already received are resolved and accepted limitations recorded; any required pre-handoff review is complete, with Conductor acceptance still pending after handoff | ☐ |
 | ⟪…⟫ | ⟪TODO: this wave's specific checks; for code guards, name the behavior and deliberate fault; for documentation-only work, name content and consistency checks and state why mutations do not apply⟫ | ☐ |
 
 ---
 
 ## Step 8: Closing and handover
 
-1. **The branch** \`⟪TODO: the branch name⟫\`: a commit per batch, then push it.
+1. **The branch** \`⟪TODO: the branch name⟫\`: a commit per batch, then complete the selected delivery mode. For local handoff report the verified bundle, SHA-256, listed branch head and that no branch push occurred.
 2. The Conductor reviews independently, merges to \`main\` and writes \`${DECISION_LOG}\` at merge time. Code integration requires the full suite on the integrated revision before publication. A failed check blocks publication; the Executor does not merge. Include proposed decisions in your report.
-3. **Debt rows**: mark what was actually delivered closed with evidence; the Conductor checks and confirms closure at merge. Record new debt **starting at #${m.nextNumber}**. Deliberate deferrals go in their own file with a trigger.
+3. **Debt rows**: mark what was actually delivered closed with evidence; the Conductor checks and confirms closure at merge. Record new debt only within the closed range assigned in Step 2. Deliberate deferrals go in their own file with a trigger.
 4. **A structured final report** covering:
    - every number in Step 2 you re-measured: **matched / differed (with the new value)**
    - what was delivered · and what was not and why
+   - design decisions, affected consumers, preserved capabilities and the relevant before/after structure measurements; or Not applicable with reason
+   - review findings, evidence for each significant finding and the correction contract's result
+   - deployment-note changes for migrations, environment variables, scheduled work or operational dependencies; or None
+   - delivery mode and separate accepted/merged/pushed/deployed states with the relevant commits; include bundle evidence for local handoff
    - new, modified or affected guards, why each was selected, the fault detected and the passing result after restoration
    - for existing guards considered in this task, what changed or why no repeated mutation was needed; group guards with the same reason
    - check commands, commit, environment, scope, stage, complete output and reasons for extra full runs or necessary reruns
@@ -477,13 +509,15 @@ For documentation-only work that does not change executable behavior, record cod
 
 **Sensitivity rating: ⟪TODO: 🔴 high / 🟡 medium / 🟢 low⟫**: use the higher class when uncertain.
 
-**After completing the required work and pushing the branch, deliver the full Step 8 report with its evidence. End the report with this status summary:**
+**After completing the required work and the selected delivery mode, deliver the full Step 8 report with its evidence. End the report with this status summary:**
 
 \`\`\`
 🛑 Wave ${title} is ready.
    Branch: ⟪TODO⟫   Commit: <hash>
    Report and evidence: <path or link to the complete Step 8 report and supporting output>
    Delivered: <a two-item summary>
+   Delivery: <remote branch or verified local bundle; commit and evidence>
+   Integration/release: <pending/merged/pushed/deployed, with applicable commits>
    Measurements changed since task preparation: <the list or "none">
    Guard + mutation: <protected behavior · fault introduced · failure and restoration results; or Not applicable with the reason for documentation-only work>
    What I could not measure: <the list>
@@ -493,6 +527,61 @@ For documentation-only work that does not change executable behavior, record cod
 
 **Then stop.** If a remaining step requires a decision outside your authority, commit the work so far, report the blocker and mark the wave incomplete. ⛔ Do not merge · do not start a next wave.
 `
+}
+
+// Optional project policy excerpts. Sources must be committed measurement inputs.
+const RULE_OPEN = "<!-- mawja:project-rules:start -->"
+const RULE_CLOSE = "<!-- mawja:project-rules:end -->"
+function projectRuleFiles(): string[] {
+  return RULE_SOURCES.map((path) => {
+    const absolute = resolve(ROOT, path)
+    const inside = relative(ROOT, absolute)
+    if (isAbsolute(path) || !inside || inside === ".." || inside.startsWith(".." + sep) || /[\r\n]/.test(path)) {
+      console.error("⛔ CONFIG: RULE_SOURCES must name files inside the repository")
+      process.exit(2)
+    }
+    requireConfigured(absolute, "project rule source", "RULE_SOURCES")
+    const real = relative(realpathSync(ROOT), realpathSync(absolute))
+    if (real === ".." || real.startsWith(".." + sep) || isAbsolute(real) || !lstatSync(absolute).isFile()) {
+      console.error("⛔ CONFIG: RULE_SOURCES must name regular files inside the repository")
+      process.exit(2)
+    }
+    return absolute
+  })
+}
+function renderProjectRules(): string {
+  if (!RULE_SOURCES.length) return ""
+  if (new Set(RULE_SOURCES).size !== RULE_SOURCES.length) {
+    console.error("⛔ CONFIG: duplicate RULE_SOURCES")
+    process.exit(2)
+  }
+  const files = projectRuleFiles()
+  const sections = RULE_SOURCES.map((path, index) => {
+    const absolute = files[index]
+    requireConfigured(absolute, "project rule source", "RULE_SOURCES")
+    const content = readFileSync(absolute, "utf8").replace(/\r\n/g, "\n")
+    const start = "<!-- mawja:rules:start -->", end = "<!-- mawja:rules:end -->"
+    if (content.split(start).length !== 2 || content.split(end).length !== 2 ||
+        content.indexOf(end) <= content.indexOf(start) || content.includes(RULE_OPEN) || content.includes(RULE_CLOSE)) {
+      console.error(`⛔ CONFIG: ${path} needs exactly one ordered mawja:rules:start/end block`)
+      process.exit(2)
+    }
+    const rules = content.slice(content.indexOf(start) + start.length, content.indexOf(end)).trim()
+    if (!rules) {
+      console.error(`⛔ CONFIG: empty project rules in ${path}`)
+      process.exit(2)
+    }
+    return `### Project rules: ${path}\n\n${rules}`
+  })
+  return `${RULE_OPEN}\n${sections.join("\n\n")}\n${RULE_CLOSE}`
+}
+function projectRulesMatch(body: string): boolean {
+  const expected = renderProjectRules()
+  if (!expected) return !body.includes(RULE_OPEN) && !body.includes(RULE_CLOSE)
+  const normalized = body.replace(/\r\n/g, "\n")
+  if (normalized.split(RULE_OPEN).length !== 2 || normalized.split(RULE_CLOSE).length !== 2) return false
+  const i = normalized.indexOf(RULE_OPEN), j = normalized.indexOf(RULE_CLOSE, i)
+  return j > i && normalized.slice(i, j + RULE_CLOSE.length) === expected
 }
 
 // ── Mode ①: generate ────────────────────────────────────────────────────────
@@ -526,8 +615,9 @@ function measurementBlockers(git: ReturnType<typeof measureGit>, tsc: ReturnType
 
 function cmdNew(slug: string, title: string, force: boolean, overwrite: boolean) {
   requireConfigured(CODE, "code root", "CODE_ROOT")
+  renderProjectRules()
   const tsc = measureTsc()
-  const git = measureGit(tsc.configurationFiles)
+  const git = measureGit([...tsc.configurationFiles, ...projectRuleFiles()])
   const blockers = measurementBlockers(git, tsc)
 
   if (blockers.length && !force) {
@@ -565,7 +655,7 @@ function cmdNew(slug: string, title: string, force: boolean, overwrite: boolean)
 
   const gaps = body.match(PLACEHOLDER)?.length ?? 0
   console.log(`\n✅ ${file}`)
-  console.log(`   Measured: HEAD \`${meta.head}\` · types ${meta.tscCount}/${meta.tscBaseline} · gates ${meta.gates} · debt ${meta.debtRows}/${meta.debtOpen} open · your numbers from #${meta.nextNumber}`)
+  console.log(`   Measured: HEAD \`${meta.head}\` · types ${meta.tscCount}/${meta.tscBaseline} · gates ${meta.gates} · debt ${meta.debtRows}/${meta.debtOpen} open · next available identifier #${meta.nextNumber} (not reserved)`)
   console.log(`   🔴 **${gaps} ⟪…⟫ gap(s) for the Conductor to complete**: fill them all, then:`)
   console.log(`      npm run wave:check -- "${file}"\n`)
 }
@@ -591,7 +681,8 @@ function cmdCheck(file: string) {
   }
 
   requireConfigured(CODE, "code root", "CODE_ROOT")
-  const tsc = measureTsc(), git = measureGit(tsc.configurationFiles), debt = measureDebt()
+  renderProjectRules()
+  const tsc = measureTsc(), git = measureGit([...tsc.configurationFiles, ...projectRuleFiles()]), debt = measureDebt()
   const now = { head: git.head, branch: git.branch, tscCrashClass: tsc.crashClass, tscCrashHits: tsc.crashHits, tscCount: tsc.count, tscBaseline: tsc.baseline, tscOk: tsc.ok, gates: measureGates(), debtRows: debt.rows, debtOpen: debt.open, nextNumber: nextNumber() }
 
   const labels: Record<string, string> = {
@@ -608,6 +699,10 @@ function cmdCheck(file: string) {
   if (old.forced?.length) console.log(`   ⚠️ Generated with --force despite: ${old.forced.join(" · ")}`)
 
   let bad = false
+  if (!projectRulesMatch(body)) {
+    bad = true
+    console.log("\n🔴 Project rule excerpts differ from their configured source; regenerate before issuing.")
+  }
   const blockers = measurementBlockers(git, tsc)
   if (blockers.length) {
     bad = true
@@ -648,7 +743,7 @@ function cmdCheck(file: string) {
 
 // ── main ────────────────────────────────────────────────────────────────────
 
-const argv = process.argv.slice(2)
+const argv = process.argv.slice(2).filter((value) => value !== "--")
 const arg = (n: string) => argv.find((a) => a.startsWith(`--${n}=`))?.split("=").slice(1).join("=")
 const force = argv.includes("--force")
 const overwrite = argv.includes("--overwrite")

@@ -24,6 +24,18 @@ Inspect the repository's files and run its configured checks before marking item
 
 Use [file architecture](06-file-architecture.md) and [debt tracking](07-the-debt-ledger.md) to address missing records, then apply the [verification procedure](09-the-verification-protocol.md).
 
+## Additional adoption checks
+
+- [ ] Significant code changes have a design note, clear state ownership and a reviewed structure delta.
+- [ ] Correction rounds have bounded acceptance, frozen interfaces and an escalation path for new critical harm.
+- [ ] Identifier ranges are reserved; shared records survive integration without loss.
+- [ ] Test resources, dependencies, processes and evidence locations are owned and isolated.
+- [ ] Delivery mode and its backup limits are explicit; main checks apply to the integrated revision.
+- [ ] Deployment notes, recoverability, external behavior and rollback are verified where applicable.
+- [ ] Gate modes, actual hook wiring and baseline provenance are reported without claiming unimplemented enforcement.
+- [ ] A shared Conductor handover procedure preserves both state and method.
+- [ ] The adopted Mawja release and commit are recorded, together with local deviations and pending integration work.
+
 ---
 
 [Previous: 12 · Limitations](12-transparency.md) · [Documentation index](README.md) · [Next: 14 · Failure patterns](14-five-failure-patterns.md)

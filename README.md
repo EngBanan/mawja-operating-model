@@ -8,7 +8,7 @@
 
 [![Document: CC BY 4.0](https://img.shields.io/badge/document-CC%20BY%204.0-1a7f5a)](LICENSE-DOC)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-1a7f5a)](LICENSE)
-[![Edition](https://img.shields.io/badge/edition-first-informational)](docs/README.md)
+[![Release](https://img.shields.io/github/v/release/EngBanan/mawja-operating-model)](https://github.com/EngBanan/mawja-operating-model/releases)
 
 [**Start here**](docs/00-foreword.md) · [**Get started**](#get-started) · [**Documentation**](docs/README.md) · [**Terms**](docs/00-terms.md) · [**Toolkit**](scripts/README.md) · [**Language support**](scripts/LANGUAGES.md)
 
@@ -110,7 +110,7 @@ A [**wave**](docs/00-terms.md#wave) is one bounded task. It begins with current 
 
 Documentation-only work needs documentation and consistency checks. Code branches need critical checks, tests for the change and required mutations. Code integration into `main` requires the full suite before publication. Follow the [verification schedule](docs/09-the-verification-protocol.md#schedule-checks); adopting these rules does not automatically update a project's hook.
 
-Independent review remains required. For code, the reviewer runs task-specific checks on the branch, introduces a different relevant fault, verifies the central claim and confirms restoration. For documentation, the reviewer checks content, links and consistency.
+The diagrams show the default approval path; [explicit project options](docs/08-sensitivity-classification.md#explicit-project-options) require recorded authorization. Independent review remains required. For code, the reviewer runs task-specific checks on the branch, introduces a different relevant fault, verifies the central claim and confirms restoration. For documentation, the reviewer checks content, links and consistency.
 
 <img src="assets/verification.svg" alt="Independent code verification: five review steps, then full checks on integrated main before publication" width="100%">
 
@@ -121,6 +121,7 @@ Passing checks establish only the behavior they cover. [Verification](docs/09-th
 | Command | Purpose |
 |---|---|
 | `wave:new` | Generate a task prompt with current Git, type, guard and debt measurements |
+| `wave:number` | Read the next available debt/decision identifier; reservations remain coordinated separately |
 | `wave:check` | Check prompt completeness and measurement drift |
 | `wave:verify` | Verify Git state, type budgets, added or changed guard commands and a supplied claim |
 | `types:check` | Enforce configured crash diagnostics, per-file budgets and the total ceiling |
@@ -148,6 +149,8 @@ The examples register these commands. The [toolkit guide](scripts/README.md) exp
 - [Adoption checklist](docs/13-audit-your-structure.md): assess an existing repository.
 - [Worked example](docs/workflow-example/README.md): a task prompt, implementation report and review for an example notes app.
 - [Multi-tool governance](AGENT_GOVERNANCE_KIT.md): shared rules, knowledge, attribution and handover.
+- [Build quality](docs/15-build-quality.md), [safe delivery](docs/16-safe-execution-and-delivery.md) and [Conductor handover](docs/17-conductor-handover.md).
+- [Version and changes](docs/CHANGELOG.md): framework releases and adoption tracking.
 - [References](docs/references.md): related projects and engineering concepts.
 
 The workflow is designed for an individual working with agents. Teams can adapt it to their existing review and release processes. Its role names and conventions are Mawja-specific; the underlying testing and version-control practices are established engineering techniques.

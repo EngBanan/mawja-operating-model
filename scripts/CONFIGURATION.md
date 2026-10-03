@@ -23,15 +23,39 @@ Set `TYPES_CMD` in `wave-prompt.ts` and `verify-wave.ts`. Set `GATES_CMD` in `wa
 
 ## Prompt generator
 
-- Set `FIXED_READS` to the rules and project documents an implementer must read.
+- Set `FIXED_READS` to the rules and project documents an implementer must read. The unconfigured default is a placeholder rather than an assumed agent-tool layout.
 - Keep `MEASURED_EXT` aligned with the language's source files. Include TypeScript extensions because the copied toolkit is TypeScript.
 - Set `TYPE_LABEL` to the checker name presented in the prompt.
-- Keep `GATES_COUNT_RE` aligned with the gate counter's output.
+- Keep `GATES_COUNT_RE` aligned with the gate counter's output. The default accepts `registered guard commands` and the legacy `live gates` label; neither proves hook wiring.
 - Fill the project-specific naming and hard-constraint placeholders in the template. Mark an inapplicable constraint explicitly.
 
 Generation requires committed measurement inputs and a branch matching its remote's advertised head. The generator uses `git ls-remote` for that comparison.
 
-`--force` writes a draft with unresolved requirements. It does not make the prompt ready. `--overwrite` replaces an existing prompt and keeps a backup. Readiness checks compare the visible measured table and embedded metadata.
+`--force` writes a draft with unresolved requirements. It does not make the prompt ready. `--overwrite` replaces an existing prompt and keeps a backup. Readiness checks compare the visible measured table and embedded metadata. A bare `--` separator is ignored by the prompt CLI, including when forwarded by pnpm.
+
+## Authoritative rule excerpts
+
+Optional `RULE_SOURCES` paths resolve from the repository root. Each source must be committed and contain exactly one nonempty ordered block:
+
+```markdown
+<!-- mawja:rules:start -->
+Use the project-owned test services. Record their identity with the result.
+<!-- mawja:rules:end -->
+```
+
+Configure the generator, for example:
+
+```typescript
+const RULE_SOURCES: readonly string[] = ["PROJECT.md"]
+```
+
+The generator includes the block verbatim apart from outer whitespace and line endings. `wave:check` compares the generated section with the current source; missing, duplicate, empty or changed excerpts block readiness. Source files undergo the same committed-byte/path checks as checker configuration. Reissue the prompt after an intentional source change. The default empty list disables excerpt inclusion, not the required project-reading fields.
+
+This does not check the meaning of a rule or enforce its execution. It does not import rules from other projects automatically. Retain source licensing when incorporating third-party text.
+
+## Claim working directory
+
+`verify-wave --claim="<command>" --claim-cwd=<directory>` runs the claim from that directory. Relative paths resolve from the repository root; absolute paths are accepted. The directory must exist and `--claim-cwd` requires a claim. Without the option, the claim runs at the repository root. Type and discovered guard commands still use `CODE_ROOT`. The verifier does not deduplicate identical commands.
 
 ## Type measurer
 

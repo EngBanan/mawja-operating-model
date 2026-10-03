@@ -2,6 +2,8 @@
 
 The Conductor reviews every wave independently before merging. For code changes, complete the steps below. For documentation-only work, independently check the changed content, links, examples and consistency with the project rules; record why code-specific steps do not apply. An executable example, configuration change or altered check behavior is not documentation-only just because it appears in a documentation directory.
 
+Review the actual diff for failure cases and the [structure delta](15-build-quality.md#review-the-structure-delta) as part of every applicable acceptance review. Confirm significant findings with a reproducer or precise code evidence, including a valid control where a test is used.
+
 The toolkit can automate checks, type measurement and Git-state inspection; independent mutations and judgment remain review responsibilities. Installed tools and hooks may still require additional checks; follow the [implementation boundary](#policy-and-hook-support).
 
 | Step | Required evidence |
@@ -42,11 +44,15 @@ When a hook fails, collect other independently measurable blockers and address t
 
 The schedule above is a workflow requirement, not evidence that a project's hook implements stage selection. Inspect the effective hook, its called commands and recorded runs. State separately which routes are implemented, which checks currently run and which capabilities need maintenance.
 
-If the hook still runs the full suite on every branch, keep that behavior until a reviewed maintenance change implements the lighter branch route. Record the extra run as an existing enforcement requirement, not an invented sensitivity reason. Missing documentation routing or a full `main` check also requires maintenance; run uncovered required checks explicitly in the meantime. Do not skip stages, disable the hook or use `--no-verify` to imitate an unimplemented route.
+For a branch push, retain the installed hook even if it runs the full suite until reviewed maintenance implements the lighter route. An explicitly authorized [local handoff](16-safe-execution-and-delivery.md#choose-a-delivery-mode) makes no push and reports the hook as unrun; it preserves branch checks and full-main integration. Record the extra run as an existing enforcement requirement, not an invented sensitivity reason. Missing documentation routing or a full `main` check also requires maintenance; run uncovered required checks explicitly in the meantime. Do not skip stages, disable the hook or use `--no-verify` to imitate an unimplemented route.
 
 The supplied prompt generator records the plan but does not select hook stages. `wave:new` and `wave:check` still require their configured type measurement, including for documentation tasks. `wave:verify` also runs its configured type check and has no documentation-only mode. `run-checks.mjs` runs its configured checks; it does not choose documentation, branch or `main` routes or enforce a full suite at merge. Keep these checks when the installed tools require them. Any change to their enforcement needs separate maintenance and validation.
 
 Before adopting routing maintenance, prove that the intended documentation and code-branch paths run their required checks, code integration into `main` cannot select the lighter route, and a failed required check still blocks delivery. Until then, report the policy as adopted and the missing capability as pending.
+
+Routing must use the actual destination refs, including explicit refspecs and multi-ref pushes. Use an allowlist for documentation-only content; include deletions, renames and executable configuration in classification. An unresolved comparison, failed Git command, empty or ambiguous scope selects the conservative full route. Print the selection. Keep applicable secret, documentation and manifest/hook parity checks on the documentation route. Prove that mixed refs cannot grant main a branch exemption.
+
+Parallelizing a runner changes scheduling, not which gates run or whether their failures block. Preserve results for each gate and propagate every required failure. Isolate outputs and keep checks with shared mutable resources serial. The optional runner remains sequential; these are integration requirements.
 
 ## Select mutation evidence
 
@@ -54,7 +60,7 @@ Prove new or modified guards and existing guards whose execution or coverage is 
 
 When repeating a previously accepted mutation, name the change in execution or coverage, missing evidence or specific review concern that requires it. For existing guards considered in the task whose execution and coverage remain unchanged, record why their mutations were not repeated; group guards that share the same reason. This does not require listing unrelated guards.
 
-Keep relevant behavior tests and the Conductor's different, independently chosen mutation. One mutation does not establish coverage of every affected case. Preserve failure from the intended assertion and a passing result after restoration.
+Keep relevant behavior tests and the Conductor's different, independently chosen mutation. For high-sensitivity code work, use two relevant fault classes, such as incorrect behavior and an incorrect boundary or attribution; two mutations do not establish complete coverage. One mutation does not establish coverage of every affected case. Preserve failure from the intended assertion and a passing result after restoration.
 
 ## Limit visual evidence to affected surfaces
 
@@ -89,6 +95,22 @@ Choose checks that address the task's risks and [acceptance criteria](00-terms.m
 For user-visible work, the Executor can provide reproducible test steps, and the Conductor can check their coverage against the requirements. The Owner can then perform the agreed tasks and record expected and actual results, including failures. This supports [user acceptance testing](00-terms.md#user-acceptance-testing).
 
 The Conductor still completes the verification steps above. The Owner's ability to read code does not change those requirements. Keep [test evidence](00-terms.md#test-evidence) and unverified behavior in the report.
+
+## Establish trustworthy evidence
+
+Before a long run, verify owned services and test-account identity. Freeze the measured files and runner during execution. Checks that inspect commit dates run after the final commit and must account for time boundaries. Retain unique command receipts and use the [environment procedure](16-safe-execution-and-delivery.md#own-the-test-environment).
+
+For a mutation, first establish a passing control. Confirm the source fault was actually applied, exercise the intended route and inspect raw case results for the expected assertion. A failed setup, a test-name filter matching nothing, stale output or an earlier unrelated rejection does not prove the guard. Preserve the original files, including untracked ones, and verify restoration.
+
+Use synchronization with the required state rather than an arbitrary sleep when a precise timing claim depends on it. Preserve pipeline exit status and complete output. Retain probes that demonstrated a defect for the correction round. Exercise real entry-point payloads and both writes and reads where state is involved.
+
+A mutation that passes means the evidence needs investigation. It does not justify deleting protected code. Confirm reachability, fixtures and alternative guards before deciding what the result means. Test missing, empty and incorrect values where applicable, including alternate representations of a rule protected only by text matching.
+
+An absence claim requires the search scope and filter, a known positive control and inspection of relevant indirect paths or history. A zero count alone cannot establish absence. Confirm identity behind authentication and test ordinary roles; a login page or administrator bypass can produce misleading success.
+
+Do not retry until a preferred result appears, weaken assertions or relax timeouts simply to get a pass. Preserve conflicting results and their environments. A justified test correction needs evidence and independent review. Environmental symptoms do not establish a root cause.
+
+After branch review, follow [Conductor intake and integration](16-safe-execution-and-delivery.md#conductor-intake-and-integration). Deployment needs [external verification](16-safe-execution-and-delivery.md#deployment-verification) after the change reaches its target; a successful local suite does not establish deployment success.
 
 ---
 

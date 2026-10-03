@@ -11,8 +11,12 @@ An example Executor report for the [fictional notes app](README.md). The reviewe
               Debt #7 marked closed with evidence for the Conductor to confirm.
               Proposed decision #10: save by same-directory temporary file and
               rename on the supported local filesystem.
-   Measurements changed since task preparation: live gates 3 → 4;
+   Measurements changed since task preparation: registered guard commands 3 → 4;
               open debt 2 → 1; next free number remains #9.
+   Delivery: remote branch commit b71e04d confirmed; merge and deployment pending.
+   Structure: the store remains the single owner of persisted notes; the public
+              load/save API and file format are unchanged. The actual delivery
+              includes before/after measurements for the changed save path.
    Verification: targeted checks ran during implementation; the local hook ran
               critical type/debt checks and the three store/shape/atomic-save
               checks on b71e04d. No additional full branch suite was required.

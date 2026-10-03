@@ -2,7 +2,7 @@
 
 Use this procedure after configuring the toolkit for a project. Run deliberate faults in a disposable repository created from the [examples](../examples/README.md), after completing the [TypeScript/JavaScript walkthrough](../docs/tutorials/typescript-javascript.md) or [Python walkthrough](../docs/tutorials/python.md).
 
-Keep production repositories and data outside these tests.
+Keep production repositories and data outside these tests. Place durable fixtures outside every existing Git checkout. Clear inherited `GIT_*` variables when creating fixture repositories so a hook cannot redirect their Git operations into another repository. Run shared mutable fixtures serially and inspect shared Git configuration before and after hook-level tests. Do not edit an active runner.
 
 This procedure validates the toolkit integration itself. The concrete sensitivity reason for its broad checks is that a broken measurement or verification tool can accept incorrect work across tasks; checking only an application feature would not detect that. Ordinary tasks follow the [documentation, branch and main schedule](../docs/09-the-verification-protocol.md#schedule-checks).
 
@@ -62,6 +62,14 @@ Snapshot protection is separate from the verifier's exit status. Check the file 
 The [example creator](../examples/create.mjs) must refuse an existing destination, a destination inside another Git repository, or one inside the Mawja checkout. An existing file or directory must remain unchanged after refusal.
 
 Try a new path containing spaces as well as your normal development path. Run the complete [TypeScript/JavaScript setup](../examples/README.md#create-and-run-an-example) or [Python setup](../docs/tutorials/python.md#create-the-project) in each created project, including the Python dependency installation when applicable.
+
+## Validate new prompt and claim settings
+
+If using `RULE_SOURCES`, generate and complete a prompt, then check it. Change only the included rule text in the prompt and confirm readiness fails; restore it and confirm readiness. Also reject missing or duplicated source markers and an uncommitted source change. These checks establish source agreement, not policy sufficiency.
+
+For `--claim-cwd`, use a command that reads a fixture present only in the selected package. Confirm the command runs there, fails with the wrong working directory and still blocks verification when its behavior assertion fails. A missing directory must fail as configuration before commands run.
+
+When adapting guard counting, check both a known matching command and a zero-match manifest. The count must not claim that the commands ran. When adapting a measurer, read its complete piped JSON with a sufficiently large diagnostic result, including a failing result, and verify the exit code and last diagnostic.
 
 ## Record the scope
 

@@ -10,6 +10,8 @@ Mawja combines specification-led task planning with established testing and vers
 | **Technical debt tracking** | Record known problems with evidence, priority and closure conditions |
 | **Ratcheting** | Prevent measured regressions while allowing improvements |
 | **Baselines** | Compare current measurements with committed snapshots |
+| **Behavior-preserving refactoring** | Separate structural preparation from changes to behavior |
+| **Clean as You Code** | Review new and changed code without hiding new deterioration inside existing debt |
 
 The minimum scan count prevents an empty scan from passing. It does not perform the formal vacuity analysis described in the [references](references.md).
 

@@ -46,10 +46,15 @@ const BASELINE_FILE = "scripts/conductor/types-baseline.json"
 const CRASH_CLASS: readonly string[] = ["TS2304", "TS2552", "TS1308"]
 // ════════════════════════════ END CONFIG ════════════════════════════════════
 
+class ConfigurationError extends Error {
+  constructor(message: string, readonly detail?: string) { super(message) }
+}
+
+function main(): number {
 const HERE = typeof __dirname !== "undefined" ? __dirname : dirname(fileURLToPath(import.meta.url))
 const ROOT = (() => {
   try { return execSync("git rev-parse --show-toplevel", { cwd: HERE, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim() }
-  catch { console.error(`⛔ CONFIG: this file is not inside a Git repository (looked from ${HERE})`); process.exit(2) }
+  catch { throw new ConfigurationError(`this file is not inside a Git repository (looked from ${HERE})`) }
 })()
 const CODE = CODE_ROOT ? resolve(ROOT, CODE_ROOT) : ROOT
 const BASELINE = resolve(ROOT, BASELINE_FILE)
@@ -57,9 +62,7 @@ const argv = process.argv.slice(2)
 const JSON_OUT = argv.includes("--json")
 
 function fail(msg: string, detail?: string): never {
-  if (JSON_OUT) console.log(JSON.stringify({ ok: false, kind: "config", error: msg, detail: detail ?? null }))
-  else { console.error(`\n⛔ CONFIG: ${msg}`); if (detail) console.error(`   ${detail}`); console.error("") }
-  process.exit(2)
+  throw new ConfigurationError(msg, detail)
 }
 
 // ── Measure ─────────────────────────────────────────────────────────────────
@@ -150,7 +153,7 @@ if (argv.includes("--init")) {
   if (existsSync(BASELINE)) fail(`snapshot already exists at ${BASELINE_FILE}`, "Use --update to lower the committed ceiling and file budgets.")
   write(snapshot())
   console.log(`✅ ${BASELINE_FILE} written: ceiling ${count} · ${Object.keys(files).length} file budget(s)`)
-  process.exit(0)
+  return 0
 }
 if (!existsSync(BASELINE)) fail(`no snapshot at ${BASELINE_FILE}`, "Run once with --init to record today's counts as the ceiling and the per-file budgets.")
 let base: Snapshot
@@ -168,7 +171,7 @@ if (argv.includes("--update")) {
   if (over.length) fail(`refusing to raise a file budget`, over.slice(0, 5).join(" · "))
   write(snapshot())
   console.log(`✅ ceiling ${base.ceiling} → ${count} · budgets recorded for ${Object.keys(files).length} file(s)`)
-  process.exit(0)
+  return 0
 }
 
 // ── Verdict ─────────────────────────────────────────────────────────────────
@@ -182,4 +185,16 @@ if (JSON_OUT) {
   if (kind === "regression") console.log(`🔴 ${count - base.ceiling} above the committed ceiling`)
   if (ok) console.log("✅ crash class zero · every file within budget · total at or under the ceiling")
 }
-process.exit(ok ? 0 : 1)
+return ok ? 0 : 1
+}
+
+try { process.exitCode = main() }
+catch (error) {
+  if (!(error instanceof ConfigurationError)) throw error
+  if (process.argv.includes("--json")) console.log(JSON.stringify({ ok: false, kind: "config", error: error.message, detail: error.detail ?? null }))
+  else {
+    console.error(`\n⛔ CONFIG: ${error.message}`)
+    if (error.detail) console.error(`   ${error.detail}`)
+  }
+  process.exitCode = 2
+}

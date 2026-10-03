@@ -44,7 +44,7 @@ Open `WAVE_PROMPT_SUBTRACT.md` and complete every placeholder:
 | Owner decisions | Work only in this example; no merge or deployment |
 | Existing behavior | Addition passes its guard and tests |
 | Batch | Calculator function, subtraction guard, test and command registration |
-| Debt | Item #1; leave it open until independent review confirms closure |
+| Debt | Item #1; mark it closed with delivery evidence, subject to Conductor confirmation at merge |
 | Constraints | English documentation; no external services, database or billing |
 | Verification plan | On the branch: type and debt checks, addition regression tests, subtraction checks and required mutations; Conductor review remains independent. No extra full suite for sensitivity. At code integration into main: full `npm run check` on the integrated revision before publication; this tutorial stops before merge |
 | Hook support | No hook is installed. Run required checks explicitly; automatic stage routing would need a separate, validated integration |

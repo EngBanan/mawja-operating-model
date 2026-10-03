@@ -88,6 +88,8 @@ For a user-visible feature, ask for [test cases](00-terms.md#test-case) you can 
 | Understand a tool setting | [Configuration](../scripts/CONFIGURATION.md) |
 | Inspect example code and shared records | [Examples](../examples/README.md) and [shared files](../examples/shared/README.md) |
 | Test or modify the toolkit itself | [Toolkit tests](../tests/README.md) |
+| Review structure or prepare delivery | [Build quality](15-build-quality.md) and [safe execution and delivery](16-safe-execution-and-delivery.md) |
+| Transfer leadership or update an adopted copy | [Conductor handover](17-conductor-handover.md) and [change history](CHANGELOG.md) |
 | Find diagrams | [Assets](../assets/) |
 | Check technical contracts or sources | [Appendix](appendix.md) and [references](references.md) |
 | Check reuse terms | [Code license](../LICENSE) and [document license](../LICENSE-DOC) |

@@ -3,7 +3,7 @@
  * Count package scripts with the configured guard prefixes.
  *
  * Used by wave-prompt.ts as the default gate-count command. Output includes
- * `(N live gates`, matched by GATES_COUNT_RE. Keep GUARD_SCRIPT_PREFIXES aligned
+ * `(N registered guard commands`, matched by GATES_COUNT_RE. Keep GUARD_SCRIPT_PREFIXES aligned
  * with verify-wave.ts.
  *
  * Exit 0 returns the count, including zero. Exit 2 indicates an unreadable
@@ -33,5 +33,6 @@ try { scripts = (JSON.parse(readFileSync(MANIFEST, "utf8")) as { scripts?: Recor
 catch { console.error(`⛔ CONFIG: ${MANIFEST} is not JSON`); process.exit(2) }
 
 const gates = Object.keys(scripts).filter((k) => GUARD_SCRIPT_PREFIXES.some((p) => k.startsWith(p))).sort()
-console.log(`🚪 gates manifest: ${MANIFEST.replace(ROOT + "/", "")} (${gates.length} live gates · prefixes ${GUARD_SCRIPT_PREFIXES.join(" · ")})`)
+console.log(`🚪 gates manifest: ${MANIFEST.replace(ROOT + "/", "")} (${gates.length} registered guard commands · prefixes ${GUARD_SCRIPT_PREFIXES.join(" · ")})`)
+console.log("   Registration count only: hook wiring and fault detection are not verified.")
 for (const g of gates) console.log(`   • ${g}`)

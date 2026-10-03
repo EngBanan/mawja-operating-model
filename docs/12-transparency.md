@@ -36,6 +36,12 @@ Follow the [verification schedule](09-the-verification-protocol.md#schedule-chec
 
 A written routing rule does not implement it. The supplied toolkit does not select hook stages. Record missing project-hook capabilities as maintenance and retain currently enforced checks until reviewed maintenance is complete. Avoid global skip switches that bypass relevant checks, and distinguish intentional routing from environment failure.
 
+## Operational and structural limits
+
+[Build quality](15-build-quality.md), [delivery](16-safe-execution-and-delivery.md) and [handover](17-conductor-handover.md) define procedures. The toolkit does not enforce module boundaries, resource ownership, local bundle delivery, deployment approval or external health. Project integrations must establish these controls and state which are manual, warning-only or blocking.
+
+A local handoff has no remote branch backup until separately established. Reusing an earlier measurement, reducing reviewer overlap or changing delivery mode does not by itself prove a time or cost saving. Measure such claims before reporting them.
+
 ---
 
 [Previous: 11 · Engineering foundations](11-what-this-framework-is-built-on.md) · [Documentation index](README.md) · [Next: 13 · Adoption checklist](13-audit-your-structure.md)
